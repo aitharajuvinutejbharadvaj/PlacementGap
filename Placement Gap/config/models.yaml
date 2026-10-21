@@ -1,0 +1,10 @@
+mode: fixture
+cheap: {model: gpt-4o-mini, temperature: 0}
+strong: {model: gpt-4o, temperature: 0}
+routing:
+  jd_extract: cheap
+  profile_normalize: cheap
+  canonicalize: cheap
+  gap_analysis: strong
+  critic: strong
+  report: strong

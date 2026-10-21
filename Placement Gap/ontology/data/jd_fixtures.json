@@ -1,0 +1,128 @@
+[
+ {
+  "title": "Software Engineer",
+  "role": "software engineer",
+  "company": "Sample Tech",
+  "location": "Remote",
+  "text": "Software Engineer: Build and maintain production software. Required skills include Python, Java, Git, REST APIs, Data Structures and Algorithms, SQL, testing, Docker, and communication. Preferred: Kubernetes and AWS."
+ },
+ {
+  "title": "Frontend Engineer",
+  "role": "frontend engineer",
+  "company": "Sample Tech",
+  "location": "Remote",
+  "text": "Frontend Engineer: Build accessible web interfaces. Required skills include JavaScript, TypeScript, React, HTML, CSS, Web Accessibility, Git, and software testing. Preferred: Next.js and Playwright."
+ },
+ {
+  "title": "Data Analyst",
+  "role": "data analyst",
+  "company": "Sample Analytics",
+  "location": "Remote",
+  "text": "Data Analyst: Analyze business data and communicate findings. Required skills include SQL, Python, Excel, Data Analysis, Data Visualization, Probability and Statistics, and Tableau. Preferred: A/B Testing and dbt."
+ },
+ {
+  "title": "Data Engineer",
+  "role": "data engineer",
+  "company": "Sample Analytics",
+  "location": "Remote",
+  "text": "Data Engineer: Design reliable data pipelines. Required skills include Python, SQL, Data Engineering, ETL, Apache Spark, Apache Airflow, Docker, and PostgreSQL. Preferred: Apache Kafka and Snowflake."
+ },
+ {
+  "title": "Machine Learning Engineer",
+  "role": "machine learning engineer",
+  "company": "Sample AI",
+  "location": "Remote",
+  "text": "Machine Learning Engineer: Develop and deploy machine learning systems. Required skills include Python, Machine Learning, Deep Learning, PyTorch, Model Evaluation, Feature Engineering, MLOps, and Data Engineering. Preferred: Transformers and LLM Applications."
+ },
+ {
+  "title": "Backend Engineer",
+  "role": "backend engineer",
+  "company": "Sample Tech",
+  "location": "Remote",
+  "text": "Backend Engineer: Design robust services and APIs. Required skills include Python, REST APIs, PostgreSQL, Docker, Git, Distributed Systems, Database Systems, Software Testing, and Linux. Preferred: Kubernetes and Terraform."
+ },
+ {
+  "title": "Full-Stack Developer",
+  "role": "full stack developer",
+  "company": "Sample Tech",
+  "location": "Remote",
+  "text": "Build features across the application stack. Required skills include JavaScript, TypeScript, React, REST APIs, SQL, Git, and Software Testing. Preferred: Docker and AWS."
+ },
+ {
+  "title": "Data Scientist",
+  "role": "data scientist",
+  "company": "Sample AI",
+  "location": "Remote",
+  "text": "Use data and statistical methods to solve business problems. Required skills include Python, SQL, Data Analysis, Probability and Statistics, Machine Learning, Data Visualization, and Model Evaluation. Preferred: PyTorch and A/B Testing."
+ },
+ {
+  "title": "DevOps Engineer",
+  "role": "devops engineer",
+  "company": "Sample Cloud",
+  "location": "Remote",
+  "text": "Automate software delivery and operate reliable infrastructure. Required skills include Linux, Docker, Kubernetes, CI/CD, Terraform, AWS, Git, and Python. Preferred: Cloud Security and Apache Kafka."
+ },
+ {
+  "title": "Cloud Engineer",
+  "role": "cloud engineer",
+  "company": "Sample Cloud",
+  "location": "Remote",
+  "text": "Build and maintain secure cloud infrastructure. Required skills include Cloud Computing, AWS, Azure, Linux, Computer Networks, Docker, Kubernetes, and Terraform. Preferred: CloudFormation and VPC Networking."
+ },
+ {
+  "title": "QA Engineer",
+  "role": "qa engineer",
+  "company": "Sample Tech",
+  "location": "Remote",
+  "text": "Improve product quality through test design and automation. Required skills include Software Testing, Unit Testing, Integration Testing, Functional Testing, Python, Git, and REST API Testing. Preferred: Playwright and CI/CD."
+ },
+ {
+  "title": "Cybersecurity Analyst",
+  "role": "cybersecurity analyst",
+  "company": "Sample Secure",
+  "location": "Remote",
+  "text": "Monitor systems and investigate security risks. Required skills include Information Security, Network Security, Linux, Computer Networks, Security Operations, Security Auditing, and Python. Preferred: Penetration Testing and Cloud Security."
+ },
+ {
+  "title": "Business Analyst",
+  "role": "business analyst",
+  "company": "Sample Analytics",
+  "location": "Remote",
+  "text": "Translate business needs into measurable requirements and reporting. Required skills include Requirements Analysis, SQL, Excel, Data Analysis, Business Intelligence, Data Visualization, Communication, and Project Management. Preferred: Product Analytics and A/B Testing."
+ },
+ {
+  "title": "Product Manager",
+  "role": "product manager",
+  "company": "Sample Product",
+  "location": "Remote",
+  "text": "Guide product discovery and delivery across engineering and business teams. Required skills include Product Thinking, Product Strategy, Requirements Analysis, Project Management, Data Analysis, Communication, and Agile. Preferred: Product Analytics and A/B Testing."
+ },
+ {
+  "title": "UI/UX Designer",
+  "role": "ux designer",
+  "company": "Sample Design",
+  "location": "Remote",
+  "text": "Design usable digital experiences and validate them with users. Required skills include Figma, Usability Testing, Design Systems, Accessibility, Responsive Design, Design Thinking, and Communication. Preferred: Product Thinking and Prototyping."
+ },
+ {
+  "title": "Mobile App Developer",
+  "role": "mobile app developer",
+  "company": "Sample Mobile",
+  "location": "Remote",
+  "text": "Build and maintain mobile applications for Android and iOS. Required skills include Kotlin, Swift, Java, REST APIs, Git, Software Testing, and Database Systems. Preferred: React Native and CI/CD."
+ },
+ {
+  "title": "Database Administrator",
+  "role": "database administrator",
+  "company": "Sample Data",
+  "location": "Remote",
+  "text": "Maintain performant, available, and secure database systems. Required skills include SQL, Database Systems, PostgreSQL, Relational Databases, Linux Administration, Database Migrations, and Data Quality. Preferred: NoSQL Databases and Cloud Computing."
+ },
+ {
+  "title": "Technical Support Engineer",
+  "role": "technical support engineer",
+  "company": "Sample Support",
+  "location": "Remote",
+  "text": "Help customers diagnose and resolve technical issues. Required skills include Linux, Computer Networks, Networking Fundamentals, SQL, REST APIs, Incident Management, Communication, and Troubleshooting. Preferred: Python and Cloud Computing."
+ }
+]

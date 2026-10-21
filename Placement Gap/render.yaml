@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: placementgap
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: PLACEMENTGAP_FIXTURES
+        value: "1"
+      - key: PLACEMENTGAP_HTTPS
+        value: "true"
+      - key: PLACEMENTGAP_SESSION_SECRET
+        generateValue: true

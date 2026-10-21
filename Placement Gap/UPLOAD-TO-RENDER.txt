@@ -1,0 +1,9 @@
+PLACEMENTGAP — MANUAL RENDER UPLOAD
+
+This is a clean copy of the PlacementGap project source. Local secrets, account/run databases, reports, logs, caches, build output, and Git metadata are excluded.
+
+IMPORTANT: Render does not accept a project folder as a direct source upload. To deploy this project, create a private GitHub repository, upload the contents of this folder into the repository root (including render.yaml), then create a Blueprint in Render from that repository. Render uses the included render.yaml and Dockerfile.
+
+The Render config uses the free web service plan and fixture mode. SQLite data is stored on the service's temporary filesystem, so test accounts and saved runs may be cleared after a restart or redeploy. Do not upload your local .env file; use Render environment variables for secrets.
+
+Required deployment files: render.yaml, Dockerfile, api/, web/, agent/, memory/, ontology/, config/, pyproject.toml, and the dependency files.

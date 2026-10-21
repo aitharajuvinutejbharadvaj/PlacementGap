@@ -1,0 +1,130 @@
+/* Larger, calmer workspace panels and an immersive, accessible role roadmap. */
+.app-shell .workspace-grid{gap:22px;align-items:stretch;margin-top:30px}
+.app-shell .workspace-grid>.panel{position:relative;min-height:480px;padding:26px;border-radius:20px;overflow:hidden;box-shadow:0 18px 45px #241a3a12}
+.app-shell .workspace-grid>.panel::before{position:absolute;top:0;left:0;right:0;height:4px;content:"";background:linear-gradient(90deg,#9674ed,#d9a2da,#8ccbb2);opacity:.9}
+.app-shell .workspace-grid .panel-heading{align-items:center;margin-bottom:24px}
+.app-shell .workspace-grid .panel-heading h2{font-size:26px;line-height:1.25;letter-spacing:-.7px}
+.app-shell .workspace-grid .panel-heading .step{font-size:13px;font-weight:700;letter-spacing:1px}
+.app-shell .workspace-grid .tabs{gap:9px;margin-bottom:23px}
+.app-shell .workspace-grid .tabs button{min-height:46px;padding:0 15px;border-radius:11px;font-weight:600}
+.app-shell .workspace-grid .tab-content{display:grid;gap:15px}
+.app-shell .workspace-grid .record-input{min-height:210px;padding:17px 18px;border-radius:14px;font-size:17px;line-height:1.7}
+.app-shell .workspace-grid .url-input,.app-shell .workspace-grid .role-select{min-height:54px;border-radius:12px;padding-left:15px;padding-right:15px}
+.app-shell .workspace-grid .mode-tabs{gap:7px;padding:5px;border-radius:13px}
+.app-shell .workspace-grid .mode-tabs button{min-height:39px;border-radius:9px}
+.app-shell .workspace-grid .upload-row{gap:10px;flex-wrap:wrap}
+.app-shell .workspace-grid .upload-button{min-height:47px;padding:0 15px;border-radius:11px}
+.app-shell .workspace-grid .privacy-note{padding:12px 14px;border-radius:12px;line-height:1.55}
+.app-shell .workspace-grid .constraints{gap:14px;margin:22px 0}
+.app-shell .workspace-grid .number-field{min-height:52px;border-radius:12px}
+.app-shell .workspace-grid .number-field input{min-height:48px}
+.app-shell .workspace-grid .primary-button{min-height:56px;border-radius:13px;font-weight:700;box-shadow:0 10px 24px #7757cf30}
+.app-shell .workspace-grid .fine-print{margin-top:17px;line-height:1.7}
+.app-shell .run-panel .panel-heading{margin-bottom:10px}
+.app-shell .run-panel .run-body{min-height:365px;display:flex;flex-direction:column;justify-content:center;padding:16px 10px 7px}
+.app-shell .run-panel .empty-visual{height:115px;margin-bottom:10px}
+.app-shell .run-panel .empty-ring{width:82px;height:82px;border-radius:25px}
+.app-shell .run-panel .run-body>h3{font-size:23px;letter-spacing:-.4px}
+.app-shell .run-panel .run-body>p{max-width:480px;font-size:16px;line-height:1.7}
+.app-shell .run-panel .mini-stats{gap:11px;margin-top:27px}
+.app-shell .run-panel .mini-stats>div{min-height:90px;padding:15px 12px;border-radius:14px}
+.app-shell .run-panel .mini-stats span{font-size:24px}
+.app-shell .run-panel .flow-list{gap:9px;margin-top:22px}
+.app-shell .run-panel .flow-node{min-height:46px;padding:9px 12px;border-radius:11px}
+.app-shell .evaluation{position:relative;margin-top:30px;padding:29px;border-radius:22px;overflow:hidden;box-shadow:0 18px 48px #241a3a12}
+.app-shell .evaluation::before{position:absolute;inset:0 0 auto;height:4px;content:"";background:linear-gradient(90deg,#72c5ad,#9b82e9,#e9b880)}
+.app-shell .evaluation .section-title{position:relative;align-items:center;margin-bottom:23px}
+.app-shell .evaluation .section-title h2{font-size:30px;letter-spacing:-.8px}
+.app-shell .evaluation .step{font-size:13px;letter-spacing:1px}
+.app-shell .evaluation .eval-grid{gap:15px}
+.app-shell .evaluation .metric-card{position:relative;min-height:164px;justify-content:center;padding:22px 23px 22px 26px;border-radius:17px;overflow:hidden;box-shadow:0 9px 22px #231a3810;transition:transform .18s ease,box-shadow .18s ease}
+.app-shell .evaluation .metric-card:hover{transform:translateY(-3px);box-shadow:0 15px 30px #231a3818}
+.app-shell .evaluation .metric-card::before{position:absolute;left:0;top:17px;bottom:17px;width:4px;border-radius:0 4px 4px 0;background:#9374e5;content:""}
+.app-shell .evaluation .metric-card:nth-child(2)::before{background:#62ae86}
+.app-shell .evaluation .metric-card:nth-child(3)::before{background:#dc9c70}
+.app-shell .evaluation .metric-card:nth-child(4)::before{background:#719bd2}
+.app-shell .evaluation .metric-card>span{font-size:14px;font-weight:650}
+.app-shell .evaluation .metric-card strong{font-size:36px;letter-spacing:-1px}
+.app-shell .evaluation .metric-card>small{font-size:13px;line-height:1.55}
+.app-shell .eval-source{padding:9px 12px;border:1px solid currentColor;border-radius:999px}
+.app-shell .catalog-card{position:relative;min-height:145px;padding:18px;border-radius:15px}
+.app-shell .catalog-card-copy{gap:7px}
+.app-shell .catalog-card-copy .catalog-open-hint{display:flex;align-items:center;gap:4px;color:#9476e2;font-size:12px;font-weight:700}
+.app-shell.theme-light .catalog-card-copy .catalog-open-hint{color:#7250cc}
+.app-shell.theme-dark .catalog-card-copy .catalog-open-hint{color:#baa6f4}
+.role-modal-backdrop{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:22px;background:#171321b8;backdrop-filter:blur(11px);animation:role-backdrop-in .18s ease-out}
+.role-modal{width:min(960px,calc(100vw - 34px));max-height:min(92vh,1000px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #e8e2f1;border-radius:24px;background:#fbfaff;color:#352f47;box-shadow:0 28px 100px #100b1f70;animation:role-modal-in .24s cubic-bezier(.2,.8,.2,1)}
+.role-modal-header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:17px 24px;border-bottom:1px solid #ece8f1;background:linear-gradient(110deg,#fff,#f8f5ff)}
+.role-modal-brand{display:flex;align-items:center;gap:12px}
+.role-modal-brand>span{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#eee8fc;color:#7655d7}
+.role-modal-brand>div{display:grid;gap:3px}
+.role-modal-brand small,.role-roadmap-heading>div>small,.role-courses-heading>div>small{color:#837a94;font-size:11px;font-weight:800;letter-spacing:1.15px}
+.role-modal-brand>div>span{color:#49435a;font-size:14px;font-weight:700}
+.role-modal-close{width:42px;height:42px;display:grid;place-items:center;border:1px solid #e9e3f0;border-radius:13px;background:#fff;color:#6b6477;cursor:pointer;transition:background .15s,color .15s,transform .15s}
+.role-modal-close:hover{transform:rotate(4deg);background:#f2edfd;color:#7050ca}
+.role-modal-scroll{min-height:0;overflow-y:auto;padding:27px 30px 34px;scrollbar-color:#c8bde1 transparent;scrollbar-width:thin}
+.role-modal-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:22px;padding:25px 27px;border:1px solid #ece6f7;border-radius:20px;background:radial-gradient(circle at 95% 0%,#eee7ff 0,transparent 34%),linear-gradient(135deg,#fff,#f7f4fc)}
+.role-modal-eyebrow{display:flex;align-items:center;gap:7px;color:#7655d7;font-size:11px;font-weight:800;letter-spacing:1.2px}
+.role-modal-hero h2{margin:12px 0 9px;color:#312a46;font:700 34px/1.12 'Manrope',sans-serif;letter-spacing:-1.3px}
+.role-modal-hero p{max-width:590px;margin:0;color:#6c6578;font-size:16px;line-height:1.7}
+.role-horizon{width:min(220px,32%);flex:0 0 auto;padding:14px;border:1px solid #e8e1f1;border-radius:15px;background:#ffffffcc}
+.role-horizon span{display:flex;align-items:center;gap:8px;color:#5b468e;font-size:14px;font-weight:750}
+.role-horizon small{display:block;margin-top:8px;color:#81798e;font-size:12px;line-height:1.5}
+.role-roadmap-heading,.role-courses-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:32px 2px 17px}
+.role-roadmap-heading h3,.role-courses-heading h3{margin:5px 0 0;color:#352f47;font:700 22px/1.25 'Manrope',sans-serif;letter-spacing:-.45px}
+.role-roadmap-heading>span{padding:8px 11px;border-radius:999px;background:#f0ebfa;color:#7455c7;font:700 11px 'DM Mono',monospace;letter-spacing:.4px}
+.role-roadmap-list{position:relative;display:grid;gap:0;margin:0;padding:0;list-style:none}
+.role-roadmap-list::before{position:absolute;top:28px;bottom:28px;left:22px;width:2px;background:linear-gradient(#bca9ed,#ece6f6);content:""}
+.role-roadmap-step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;padding:0 0 17px}
+.role-roadmap-step:last-child{padding-bottom:0}
+.roadmap-index{z-index:1;width:46px;height:46px;display:grid;place-items:center;border:1px solid #dfd5f0;border-radius:15px;background:#f5f1fc;color:#785bd0;font:700 13px 'DM Mono',monospace}
+.roadmap-step-body{padding:0 0 17px;border-bottom:1px solid #ece8f1}
+.role-roadmap-step:last-child .roadmap-step-body{padding-bottom:0;border-bottom:0}
+.roadmap-step-title{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.roadmap-step-title>span{color:#8d81a3;font:700 10px 'DM Mono',monospace;letter-spacing:.5px}
+.roadmap-step-title h4{margin:0;color:#3a344b;font:700 16px/1.4 'Manrope',sans-serif}
+.roadmap-step-body>p{margin:8px 0 11px;color:#6e687b;font-size:14px;line-height:1.65}
+.roadmap-deliverable{display:flex;align-items:flex-start;gap:8px;padding:11px 13px;border:1px solid #e7f0e9;border-radius:12px;background:#f5fbf6;color:#536d5b;font-size:13px;line-height:1.55}
+.roadmap-deliverable svg{flex:0 0 auto;margin-top:1px;color:#57a275}
+.roadmap-deliverable b{color:#447254}
+.role-courses-heading{margin-top:34px}
+.role-courses-heading>svg{color:#8465da}
+.role-course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.role-course-card{min-height:190px;display:flex;flex-direction:column;align-items:flex-start;padding:17px;border:1px solid #e7e1ee;border-radius:16px;background:linear-gradient(145deg,#fff,#faf8fc);color:inherit;text-decoration:none;box-shadow:0 6px 18px #21193608;transition:transform .18s,border-color .18s,box-shadow .18s}
+.role-course-card:hover{transform:translateY(-3px);border-color:#c9b9ee;box-shadow:0 13px 26px #4d3a7514}
+.role-course-provider{color:#8069b6;font-size:11px;font-weight:800;letter-spacing:.35px}
+.role-course-card strong{margin-top:9px;color:#373047;font:700 16px/1.35 'Manrope',sans-serif}
+.role-course-card p{margin:8px 0 15px;color:#777083;font-size:13px;line-height:1.55}
+.role-course-link{display:flex;align-items:center;gap:5px;margin-top:auto;color:#7152c5;font-size:12px;font-weight:750}
+.role-modal-footer{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:17px;padding:17px 25px;border-top:1px solid #ece8f1;background:#fff}
+.role-modal-footer>span{color:#817a8d;font-size:12px;line-height:1.5}
+.role-use-button{min-height:47px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 17px;border:0;border-radius:12px;background:linear-gradient(110deg,#7959d3,#946de2);color:#fff;font-size:14px;font-weight:750;cursor:pointer;box-shadow:0 8px 20px #7655d72d;transition:transform .15s,filter .15s}
+.role-use-button:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.theme-dark .role-modal{border-color:#373142;background:#1b1924;color:#f0edf6}
+.theme-dark .role-modal-header,.theme-dark .role-modal-footer{border-color:#373142;background:#211e2b}
+.theme-dark .role-modal-brand>div>span,.theme-dark .role-roadmap-heading h3,.theme-dark .role-courses-heading h3,.theme-dark .roadmap-step-title h4,.theme-dark .role-course-card strong{color:#f1edf8}
+.theme-dark .role-modal-brand small,.theme-dark .role-roadmap-heading>div>small,.theme-dark .role-courses-heading>div>small{color:#b3aabf}
+.theme-dark .role-modal-close{border-color:#413a4e;background:#292533;color:#d0c9d9}
+.theme-dark .role-modal-hero{border-color:#3e3550;background:radial-gradient(circle at 95% 0%,#352c4b 0,transparent 36%),linear-gradient(135deg,#24212d,#211e29)}
+.theme-dark .role-modal-hero h2{color:#f2eef8}
+.theme-dark .role-modal-hero p,.theme-dark .roadmap-step-body>p{color:#beb7c9}
+.theme-dark .role-horizon{border-color:#494057;background:#2a2634}
+.theme-dark .role-horizon span{color:#c9b9f1}
+.theme-dark .role-horizon small,.theme-dark .role-modal-footer>span{color:#ada5b7}
+.theme-dark .role-roadmap-heading>span{background:#332c42;color:#c6b4f4}
+.theme-dark .role-roadmap-list::before{background:linear-gradient(#8067b7,#373142)}
+.theme-dark .roadmap-index{border-color:#4b405f;background:#302a3b;color:#c4b0f1}
+.theme-dark .roadmap-step-body{border-color:#373142}
+.theme-dark .roadmap-step-title>span{color:#aaa0b6}
+.theme-dark .roadmap-deliverable{border-color:#34463c;background:#222f28;color:#c3d6c8}
+.theme-dark .roadmap-deliverable b,.theme-dark .roadmap-deliverable svg{color:#91cba5}
+.theme-dark .role-course-card{border-color:#3b3546;background:linear-gradient(145deg,#25222f,#211f29)}
+.theme-dark .role-course-provider{color:#bea9ed}
+.theme-dark .role-course-card p{color:#b6afc1}
+.theme-dark .role-course-link{color:#c0acf2}
+@keyframes role-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes role-modal-in{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:900px){.app-shell .workspace-grid>.panel{padding:22px}.app-shell .run-panel .run-body{min-height:340px}.role-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.app-shell .workspace-grid{gap:17px;margin-top:22px}.app-shell .workspace-grid>.panel{min-height:0;padding:20px;border-radius:17px}.app-shell .workspace-grid .panel-heading{margin-bottom:19px}.app-shell .workspace-grid .panel-heading h2{font-size:23px}.app-shell .workspace-grid .record-input{min-height:175px;font-size:16px}.app-shell .run-panel .run-body{min-height:300px;padding:10px 2px}.app-shell .evaluation{margin-top:22px;padding:21px 17px;border-radius:18px}.app-shell .evaluation .section-title{align-items:flex-start;gap:12px;flex-direction:column}.app-shell .evaluation .section-title h2{font-size:25px}.app-shell .evaluation .metric-card{min-height:135px;padding:18px}.app-shell .evaluation .metric-card strong{font-size:31px}.app-shell .catalog-card{min-height:135px}.role-modal-backdrop{padding:9px}.role-modal{width:calc(100vw - 18px);max-height:96vh;border-radius:19px}.role-modal-header{padding:13px 15px}.role-modal-scroll{padding:17px 15px 24px}.role-modal-hero{align-items:flex-start;flex-direction:column;padding:19px}.role-modal-hero h2{font-size:29px}.role-modal-hero p{font-size:15px}.role-horizon{width:100%}.role-roadmap-heading{margin-top:25px}.role-roadmap-heading h3,.role-courses-heading h3{font-size:19px}.role-roadmap-step{grid-template-columns:39px minmax(0,1fr);gap:11px}.roadmap-index{width:39px;height:39px;border-radius:13px}.role-roadmap-list::before{left:19px}.roadmap-step-title h4{font-size:15px}.roadmap-step-body>p{font-size:13px}.roadmap-deliverable{font-size:12px}.role-course-grid{grid-template-columns:1fr}.role-course-card{min-height:155px}.role-modal-footer{align-items:stretch;flex-direction:column;padding:14px 15px}.role-use-button{width:100%}}
+@media(max-width:430px){.app-shell .workspace-grid>.panel{padding:17px}.app-shell .workspace-grid .panel-heading h2{font-size:21px}.app-shell .evaluation .eval-grid{grid-template-columns:1fr 1fr;gap:9px}.app-shell .evaluation .metric-card{min-height:127px;padding:16px 13px 16px 17px}.app-shell .evaluation .metric-card>span{font-size:12px}.app-shell .evaluation .metric-card strong{font-size:27px}.app-shell .evaluation .metric-card>small{font-size:11px}.app-shell .catalog-card{padding:14px}.role-roadmap-heading>span{display:none}.role-modal-brand>div>span{font-size:13px}.role-modal-hero h2{font-size:26px}.role-modal-footer>span{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.role-modal-backdrop,.role-modal{animation:none}.role-course-card,.role-use-button,.catalog-card{transition:none}}

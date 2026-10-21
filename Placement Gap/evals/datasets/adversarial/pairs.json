@@ -1,0 +1,742 @@
+[
+  {
+    "id": "pair-081",
+    "profile": "Student academic record. Completed Scrum coursework. Completed Computer Networks coursework. Built and implemented a project using BigQuery. Built and implemented a project using Product Strategy.",
+    "jd": "We seek a candidate skilled in Scrum, Computer Networks, BigQuery, Product Strategy, Hash Tables. Preferred experience with Hash Tables.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "scrum",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "computer_networks",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "bigquery",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "product_strategy",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "hash_tables",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-082",
+    "profile": "Student academic record. Completed Privacy Engineering coursework. Completed iOS Development coursework. Built and implemented a project using React Native. Built and implemented a project using Angular.",
+    "jd": "We seek a candidate skilled in Privacy Engineering, iOS Development, React Native, Angular, OAuth. Preferred experience with OAuth.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "privacy_engineering",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "ios_development",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "react_native",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "angular",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "oauth",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-083",
+    "profile": "Student academic record. Completed Sass coursework. Completed Flutter coursework. Built and implemented a project using Numerical Methods. Built and implemented a project using Information Retrieval.",
+    "jd": "We seek a candidate skilled in Sass, Flutter, Numerical Methods, Information Retrieval, Accessibility. Preferred experience with Accessibility.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "sass",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "flutter",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "numerical_methods",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "information_retrieval",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "accessibility",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-084",
+    "profile": "Student academic record. Completed ASP.NET Core coursework. Completed pytest coursework. Built and implemented a project using Incident Response. Built and implemented a project using ETL.",
+    "jd": "We seek a candidate skilled in ASP.NET Core, pytest, Incident Response, ETL, Container Security. Preferred experience with Container Security.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "aspnet_core",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "pytest",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "incident_response",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "etl",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "container_security",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-085",
+    "profile": "Student academic record. Completed Trino coursework. Completed SQLite coursework. Built and implemented a project using Recommendation Ranking. Built and implemented a project using GPU Computing.",
+    "jd": "We seek a candidate skilled in Trino, SQLite, Recommendation Ranking, GPU Computing, C#. Preferred experience with C#.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "trino",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "sqlite",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "recommendation_ranking",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "gpu_computing",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "csharp",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-086",
+    "profile": "Student academic record. Completed Model Monitoring coursework. Completed Static Analysis coursework. Built and implemented a project using Time Series Forecasting. Built and implemented a project using Disaster Recovery.",
+    "jd": "We seek a candidate skilled in Model Monitoring, Static Analysis, Time Series Forecasting, Disaster Recovery, Indexing. Preferred experience with Indexing.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "model_monitoring",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "static_analysis",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "time_series_forecasting",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "disaster_recovery",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "indexing",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-087",
+    "profile": "Student academic record. Completed RabbitMQ coursework. Completed Hash Tables coursework. Built and implemented a project using Load Testing. Built and implemented a project using Normalization.",
+    "jd": "We seek a candidate skilled in RabbitMQ, Hash Tables, Load Testing, Normalization, Hexagonal Architecture. Preferred experience with Hexagonal Architecture.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "rabbitmq",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "hash_tables",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "load_testing",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "normalization",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "hexagonal_architecture",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-088",
+    "profile": "Student academic record. Completed Transformers coursework. Completed HTML coursework. Built and implemented a project using Written Communication. Built and implemented a project using Computer Vision.",
+    "jd": "We seek a candidate skilled in Transformers, HTML, Written Communication, Computer Vision, Compiler Design. Preferred experience with Compiler Design.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "transformers",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "html",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "written_communication",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "computer_vision",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "compiler_design",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-089",
+    "profile": "Student academic record. Completed Penetration Testing coursework. Completed Argo CD coursework. Built and implemented a project using Prompt Evaluation. Built and implemented a project using PHP.",
+    "jd": "We seek a candidate skilled in Penetration Testing, Argo CD, Prompt Evaluation, PHP, Tableau. Preferred experience with Tableau.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "penetration_testing",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "argo_cd",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "prompt_evaluation",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "php",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "tableau",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-090",
+    "profile": "Student academic record. Completed Regression coursework. Completed GitHub Actions coursework. Built and implemented a project using HTML Semantics. Built and implemented a project using Probability and Statistics.",
+    "jd": "We seek a candidate skilled in Regression, GitHub Actions, HTML Semantics, Probability and Statistics, Data Privacy. Preferred experience with Data Privacy.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "regression",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "github_actions",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "html_semantics",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "probability_and_statistics",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "data_privacy",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-091",
+    "profile": "Student academic record. Completed LangChain coursework. Completed Weaviate coursework. Built and implemented a project using Semantic Search. Built and implemented a project using Security Operations.",
+    "jd": "We seek a candidate skilled in LangChain, Weaviate, Semantic Search, Security Operations, Lambda Functions. Preferred experience with Lambda Functions.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "langchain",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "weaviate",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "semantic_search",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "security_operations",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "lambda_functions",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-092",
+    "profile": "Student academic record. Completed Lua coursework. Completed Accessibility coursework. Built and implemented a project using Agentic Systems. Built and implemented a project using Agile.",
+    "jd": "We seek a candidate skilled in Lua, Accessibility, Agentic Systems, Agile, OAuth 2.0. Preferred experience with OAuth 2.0.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "lua",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "accessibility",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "agentic_systems",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "agile",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "oauth_20",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-093",
+    "profile": "Student academic record. Completed Container Security coursework. Completed Grafana coursework. Built and implemented a project using Data Structures in Python. Built and implemented a project using Programming Fundamentals.",
+    "jd": "We seek a candidate skilled in Container Security, Grafana, Data Structures in Python, Programming Fundamentals, Oracle Database. Preferred experience with Oracle Database.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "container_security",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "grafana",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "data_structures_in_python",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "programming_fundamentals",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "oracle_database",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-094",
+    "profile": "Student academic record. Completed Tool Calling coursework. Completed Encryption coursework. Built and implemented a project using SEO. Built and implemented a project using Optimization.",
+    "jd": "We seek a candidate skilled in Tool Calling, Encryption, SEO, Optimization, GDPR. Preferred experience with GDPR.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "tool_calling",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "encryption",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "seo",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "optimization",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "gdpr",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-095",
+    "profile": "Student academic record. Completed Survival Analysis coursework. Completed TypeScript Generics coursework. Built and implemented a project using Customer Discovery. Built and implemented a project using Technical Presentations.",
+    "jd": "We seek a candidate skilled in Survival Analysis, TypeScript Generics, Customer Discovery, Technical Presentations, Rust. Preferred experience with Rust.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "survival_analysis",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "typescript_generics",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "customer_discovery",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "technical_presentations",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "rust",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-096",
+    "profile": "Student academic record. Completed Linear Algebra coursework. Completed API Documentation coursework. Built and implemented a project using LangGraph. Built and implemented a project using Vite.",
+    "jd": "We seek a candidate skilled in Linear Algebra, API Documentation, LangGraph, Vite, Chaos Engineering. Preferred experience with Chaos Engineering.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "linear_algebra",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "api_documentation",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "langgraph",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "vite",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "chaos_engineering",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-097",
+    "profile": "Student academic record. Completed Process Scheduling coursework. Completed Graph Algorithms coursework. Built and implemented a project using Sass. Built and implemented a project using PowerShell.",
+    "jd": "We seek a candidate skilled in Process Scheduling, Graph Algorithms, Sass, PowerShell, Data Modeling. Preferred experience with Data Modeling.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "process_scheduling",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "graph_algorithms",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "sass",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "powershell",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "data_modeling",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-098",
+    "profile": "Student academic record. Completed VPC Networking coursework. Completed Service Level Objectives coursework. Built and implemented a project using ABAC. Built and implemented a project using Linear Algebra.",
+    "jd": "We seek a candidate skilled in VPC Networking, Service Level Objectives, ABAC, Linear Algebra, SOC 2. Preferred experience with SOC 2.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "vpc_networking",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "service_level_objectives",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "abac",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "linear_algebra",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "soc_2",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-099",
+    "profile": "Student academic record. Completed Cost Optimization coursework. Completed Apache Hadoop coursework. Built and implemented a project using Container Security. Built and implemented a project using Recursion.",
+    "jd": "We seek a candidate skilled in Cost Optimization, Apache Hadoop, Container Security, Recursion, Usability Testing. Preferred experience with Usability Testing.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "cost_optimization",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "apache_hadoop",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "container_security",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "recursion",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "usability_testing",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  },
+  {
+    "id": "pair-100",
+    "profile": "Student academic record. Completed Embeddings coursework. Completed Natural Language Processing coursework. Built and implemented a project using Prompt Evaluation. Built and implemented a project using Prompt Injection Defense.",
+    "jd": "We seek a candidate skilled in Embeddings, Natural Language Processing, Prompt Evaluation, Prompt Injection Defense, Jest. Preferred experience with Jest.",
+    "labels": {
+      "required_skills": [
+        {
+          "skill_id": "embeddings",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "natural_language_processing",
+          "hard": true,
+          "expected_verdict": "partial"
+        },
+        {
+          "skill_id": "prompt_evaluation",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "prompt_injection_defense",
+          "hard": true,
+          "expected_verdict": "has"
+        },
+        {
+          "skill_id": "jest",
+          "hard": false,
+          "expected_verdict": "missing"
+        }
+      ],
+      "acceptable_plan": {
+        "max_hours": 48
+      }
+    }
+  }
+]

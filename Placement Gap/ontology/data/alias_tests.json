@@ -1,0 +1,618 @@
+[
+  {
+    "text": "python",
+    "skill_id": "python"
+  },
+  {
+    "text": "PYTHON",
+    "skill_id": "python"
+  },
+  {
+    "text": "Python",
+    "skill_id": "python"
+  },
+  {
+    "text": "java",
+    "skill_id": "java"
+  },
+  {
+    "text": "JAVA",
+    "skill_id": "java"
+  },
+  {
+    "text": "Java",
+    "skill_id": "java"
+  },
+  {
+    "text": "javascript",
+    "skill_id": "javascript"
+  },
+  {
+    "text": "JAVASCRIPT",
+    "skill_id": "javascript"
+  },
+  {
+    "text": "JavaScript",
+    "skill_id": "javascript"
+  },
+  {
+    "text": "typescript",
+    "skill_id": "typescript"
+  },
+  {
+    "text": "TYPESCRIPT",
+    "skill_id": "typescript"
+  },
+  {
+    "text": "TypeScript",
+    "skill_id": "typescript"
+  },
+  {
+    "text": "c",
+    "skill_id": "c"
+  },
+  {
+    "text": "C",
+    "skill_id": "c"
+  },
+  {
+    "text": "C fundamentals",
+    "skill_id": "c"
+  },
+  {
+    "text": "c++",
+    "skill_id": "cplusplus"
+  },
+  {
+    "text": "C++",
+    "skill_id": "cplusplus"
+  },
+  {
+    "text": "C++ fundamentals",
+    "skill_id": "cplusplus"
+  },
+  {
+    "text": "c#",
+    "skill_id": "csharp"
+  },
+  {
+    "text": "C#",
+    "skill_id": "csharp"
+  },
+  {
+    "text": "C# fundamentals",
+    "skill_id": "csharp"
+  },
+  {
+    "text": "go",
+    "skill_id": "go"
+  },
+  {
+    "text": "GO",
+    "skill_id": "go"
+  },
+  {
+    "text": "Go",
+    "skill_id": "go"
+  },
+  {
+    "text": "rust",
+    "skill_id": "rust"
+  },
+  {
+    "text": "RUST",
+    "skill_id": "rust"
+  },
+  {
+    "text": "Rust",
+    "skill_id": "rust"
+  },
+  {
+    "text": "ruby",
+    "skill_id": "ruby"
+  },
+  {
+    "text": "RUBY",
+    "skill_id": "ruby"
+  },
+  {
+    "text": "Ruby",
+    "skill_id": "ruby"
+  },
+  {
+    "text": "php",
+    "skill_id": "php"
+  },
+  {
+    "text": "PHP",
+    "skill_id": "php"
+  },
+  {
+    "text": "PHP fundamentals",
+    "skill_id": "php"
+  },
+  {
+    "text": "swift",
+    "skill_id": "swift"
+  },
+  {
+    "text": "SWIFT",
+    "skill_id": "swift"
+  },
+  {
+    "text": "Swift",
+    "skill_id": "swift"
+  },
+  {
+    "text": "kotlin",
+    "skill_id": "kotlin"
+  },
+  {
+    "text": "KOTLIN",
+    "skill_id": "kotlin"
+  },
+  {
+    "text": "Kotlin",
+    "skill_id": "kotlin"
+  },
+  {
+    "text": "scala",
+    "skill_id": "scala"
+  },
+  {
+    "text": "SCALA",
+    "skill_id": "scala"
+  },
+  {
+    "text": "Scala",
+    "skill_id": "scala"
+  },
+  {
+    "text": "r",
+    "skill_id": "r"
+  },
+  {
+    "text": "R",
+    "skill_id": "r"
+  },
+  {
+    "text": "R fundamentals",
+    "skill_id": "r"
+  },
+  {
+    "text": "matlab",
+    "skill_id": "matlab"
+  },
+  {
+    "text": "MATLAB",
+    "skill_id": "matlab"
+  },
+  {
+    "text": "MATLAB fundamentals",
+    "skill_id": "matlab"
+  },
+  {
+    "text": "bash",
+    "skill_id": "bash"
+  },
+  {
+    "text": "BASH",
+    "skill_id": "bash"
+  },
+  {
+    "text": "Bash",
+    "skill_id": "bash"
+  },
+  {
+    "text": "powershell",
+    "skill_id": "powershell"
+  },
+  {
+    "text": "POWERSHELL",
+    "skill_id": "powershell"
+  },
+  {
+    "text": "PowerShell",
+    "skill_id": "powershell"
+  },
+  {
+    "text": "sql",
+    "skill_id": "sql"
+  },
+  {
+    "text": "SQL",
+    "skill_id": "sql"
+  },
+  {
+    "text": "SQL fundamentals",
+    "skill_id": "sql"
+  },
+  {
+    "text": "html",
+    "skill_id": "html"
+  },
+  {
+    "text": "HTML",
+    "skill_id": "html"
+  },
+  {
+    "text": "HTML fundamentals",
+    "skill_id": "html"
+  },
+  {
+    "text": "css",
+    "skill_id": "css"
+  },
+  {
+    "text": "CSS",
+    "skill_id": "css"
+  },
+  {
+    "text": "CSS fundamentals",
+    "skill_id": "css"
+  },
+  {
+    "text": "dart",
+    "skill_id": "dart"
+  },
+  {
+    "text": "DART",
+    "skill_id": "dart"
+  },
+  {
+    "text": "Dart",
+    "skill_id": "dart"
+  },
+  {
+    "text": "elixir",
+    "skill_id": "elixir"
+  },
+  {
+    "text": "ELIXIR",
+    "skill_id": "elixir"
+  },
+  {
+    "text": "Elixir",
+    "skill_id": "elixir"
+  },
+  {
+    "text": "haskell",
+    "skill_id": "haskell"
+  },
+  {
+    "text": "HASKELL",
+    "skill_id": "haskell"
+  },
+  {
+    "text": "Haskell",
+    "skill_id": "haskell"
+  },
+  {
+    "text": "lua",
+    "skill_id": "lua"
+  },
+  {
+    "text": "LUA",
+    "skill_id": "lua"
+  },
+  {
+    "text": "Lua",
+    "skill_id": "lua"
+  },
+  {
+    "text": "data structures and algorithms",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "DATA STRUCTURES AND ALGORITHMS",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "Data Structures & Algorithms",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "operating systems",
+    "skill_id": "operating_systems"
+  },
+  {
+    "text": "OPERATING SYSTEMS",
+    "skill_id": "operating_systems"
+  },
+  {
+    "text": "Operating Systems",
+    "skill_id": "operating_systems"
+  },
+  {
+    "text": "computer networks",
+    "skill_id": "computer_networks"
+  },
+  {
+    "text": "COMPUTER NETWORKS",
+    "skill_id": "computer_networks"
+  },
+  {
+    "text": "Computer Networks",
+    "skill_id": "computer_networks"
+  },
+  {
+    "text": "database systems",
+    "skill_id": "database_systems"
+  },
+  {
+    "text": "DATABASE SYSTEMS",
+    "skill_id": "database_systems"
+  },
+  {
+    "text": "Database Systems",
+    "skill_id": "database_systems"
+  },
+  {
+    "text": "computer architecture",
+    "skill_id": "computer_architecture"
+  },
+  {
+    "text": "COMPUTER ARCHITECTURE",
+    "skill_id": "computer_architecture"
+  },
+  {
+    "text": "Computer Architecture",
+    "skill_id": "computer_architecture"
+  },
+  {
+    "text": "distributed systems",
+    "skill_id": "distributed_systems"
+  },
+  {
+    "text": "DISTRIBUTED SYSTEMS",
+    "skill_id": "distributed_systems"
+  },
+  {
+    "text": "Distributed Systems",
+    "skill_id": "distributed_systems"
+  },
+  {
+    "text": "compiler design",
+    "skill_id": "compiler_design"
+  },
+  {
+    "text": "COMPILER DESIGN",
+    "skill_id": "compiler_design"
+  },
+  {
+    "text": "Compiler Design",
+    "skill_id": "compiler_design"
+  },
+  {
+    "text": "theory of computation",
+    "skill_id": "theory_of_computation"
+  },
+  {
+    "text": "THEORY OF COMPUTATION",
+    "skill_id": "theory_of_computation"
+  },
+  {
+    "text": "Theory of Computation",
+    "skill_id": "theory_of_computation"
+  },
+  {
+    "text": "cryptography",
+    "skill_id": "cryptography"
+  },
+  {
+    "text": "CRYPTOGRAPHY",
+    "skill_id": "cryptography"
+  },
+  {
+    "text": "Cryptography",
+    "skill_id": "cryptography"
+  },
+  {
+    "text": "information retrieval",
+    "skill_id": "information_retrieval"
+  },
+  {
+    "text": "INFORMATION RETRIEVAL",
+    "skill_id": "information_retrieval"
+  },
+  {
+    "text": "Information Retrieval",
+    "skill_id": "information_retrieval"
+  },
+  {
+    "text": "search algorithms",
+    "skill_id": "search_algorithms"
+  },
+  {
+    "text": "SEARCH ALGORITHMS",
+    "skill_id": "search_algorithms"
+  },
+  {
+    "text": "Search Algorithms",
+    "skill_id": "search_algorithms"
+  },
+  {
+    "text": "concurrency",
+    "skill_id": "concurrency"
+  },
+  {
+    "text": "CONCURRENCY",
+    "skill_id": "concurrency"
+  },
+  {
+    "text": "Concurrency",
+    "skill_id": "concurrency"
+  },
+  {
+    "text": "memory management",
+    "skill_id": "memory_management"
+  },
+  {
+    "text": "MEMORY MANAGEMENT",
+    "skill_id": "memory_management"
+  },
+  {
+    "text": "Memory Management",
+    "skill_id": "memory_management"
+  },
+  {
+    "text": "object oriented programming",
+    "skill_id": "object_oriented_programming"
+  },
+  {
+    "text": "OBJECT ORIENTED PROGRAMMING",
+    "skill_id": "object_oriented_programming"
+  },
+  {
+    "text": "Object Oriented Programming",
+    "skill_id": "object_oriented_programming"
+  },
+  {
+    "text": "functional programming",
+    "skill_id": "functional_programming"
+  },
+  {
+    "text": "FUNCTIONAL PROGRAMMING",
+    "skill_id": "functional_programming"
+  },
+  {
+    "text": "Functional Programming",
+    "skill_id": "functional_programming"
+  },
+  {
+    "text": "design patterns",
+    "skill_id": "design_patterns"
+  },
+  {
+    "text": "DESIGN PATTERNS",
+    "skill_id": "design_patterns"
+  },
+  {
+    "text": "Design Patterns",
+    "skill_id": "design_patterns"
+  },
+  {
+    "text": "software testing",
+    "skill_id": "software_testing"
+  },
+  {
+    "text": "SOFTWARE TESTING",
+    "skill_id": "software_testing"
+  },
+  {
+    "text": "Software Testing",
+    "skill_id": "software_testing"
+  },
+  {
+    "text": "programming fundamentals",
+    "skill_id": "programming_fundamentals"
+  },
+  {
+    "text": "PROGRAMMING FUNDAMENTALS",
+    "skill_id": "programming_fundamentals"
+  },
+  {
+    "text": "Programming Fundamentals",
+    "skill_id": "programming_fundamentals"
+  },
+  {
+    "text": "discrete mathematics",
+    "skill_id": "discrete_mathematics"
+  },
+  {
+    "text": "DISCRETE MATHEMATICS",
+    "skill_id": "discrete_mathematics"
+  },
+  {
+    "text": "Discrete Mathematics",
+    "skill_id": "discrete_mathematics"
+  },
+  {
+    "text": "linear algebra",
+    "skill_id": "linear_algebra"
+  },
+  {
+    "text": "LINEAR ALGEBRA",
+    "skill_id": "linear_algebra"
+  },
+  {
+    "text": "Linear Algebra",
+    "skill_id": "linear_algebra"
+  },
+  {
+    "text": "probability and statistics",
+    "skill_id": "probability_and_statistics"
+  },
+  {
+    "text": "PROBABILITY AND STATISTICS",
+    "skill_id": "probability_and_statistics"
+  },
+  {
+    "text": "Probability & Statistics",
+    "skill_id": "probability_and_statistics"
+  },
+  {
+    "text": "optimization",
+    "skill_id": "optimization"
+  },
+  {
+    "text": "OPTIMIZATION",
+    "skill_id": "optimization"
+  },
+  {
+    "text": "Optimization",
+    "skill_id": "optimization"
+  },
+  {
+    "text": "numerical methods",
+    "skill_id": "numerical_methods"
+  },
+  {
+    "text": "NUMERICAL METHODS",
+    "skill_id": "numerical_methods"
+  },
+  {
+    "text": "Numerical Methods",
+    "skill_id": "numerical_methods"
+  },
+  {
+    "text": "human computer interaction",
+    "skill_id": "human_computer_interaction"
+  },
+  {
+    "text": "HUMAN COMPUTER INTERACTION",
+    "skill_id": "human_computer_interaction"
+  },
+  {
+    "text": "Human Computer Interaction",
+    "skill_id": "human_computer_interaction"
+  },
+  {
+    "text": "information security",
+    "skill_id": "information_security"
+  },
+  {
+    "text": "INFORMATION SECURITY",
+    "skill_id": "information_security"
+  },
+  {
+    "text": "Information Security",
+    "skill_id": "information_security"
+  },
+  {
+    "text": "DSA",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "Data Structures & Algorithms",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "CS201 Data Structures",
+    "skill_id": "data_structures_and_algorithms"
+  },
+  {
+    "text": "algos",
+    "skill_id": "data_structures_and_algorithms"
+  }
+]
