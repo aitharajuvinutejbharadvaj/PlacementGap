@@ -22,7 +22,21 @@ The free Render service uses local SQLite on an ephemeral filesystem. Accounts, 
 
 ## Email and password accounts
 
-Create an account or sign in with an email address and password from the login page. Passwords are stored as salted scrypt hashes; signed-in sessions use a signed, HTTP-only, seven-day cookie. Copy `.env.example` to `.env` and set `PLACEMENTGAP_SESSION_SECRET` to a random value to keep sessions valid across API restarts. Set `PLACEMENTGAP_HTTPS=true` when serving the site over HTTPS. Account and run data are stored locally in SQLite.
+Create an account or sign in with an email address and password from the login page. Passwords are stored as salted scrypt hashes; signed-in sessions use a signed, HTTP-only, seven-day cookie. A new account cannot sign in until the person opens a single-use email verification link. Verification links expire after 30 minutes, and resends are rate-limited. Each successful password sign-in triggers a security notification to the verified address; a temporary mail-provider failure is logged without locking the user out.
+
+Email delivery is required to register accounts. Configure `PLACEMENTGAP_RESEND_API_KEY` and `PLACEMENTGAP_MAIL_FROM` in Render's service settings (or in `.env` locally). The API key must be a Resend send-only key; the sender address must belong to a domain verified in Resend (for example, `PlacementGap <no-reply@your-domain.example>`). This app sends messages through Resend's HTTPS API, which works on Render Free where outbound SMTP ports are blocked. Set `PLACEMENTGAP_PUBLIC_URL` to the public website address so links point to the correct site. Never commit the API key or add it to the frontend. Use a separate development key/sender for local testing if desired.
+
+For the Render service, use `https://placementgap.onrender.com` as `PLACEMENTGAP_PUBLIC_URL`. Copy `.env.example` to `.env` for local development, set `PLACEMENTGAP_SESSION_SECRET` to a random value to keep sessions valid across API restarts, and set `PLACEMENTGAP_HTTPS=true` when serving over HTTPS. Existing accounts from the older schema must verify their address once before signing in. Account and run data are stored locally in SQLite.
+
+### Google and GitHub sign-in
+
+The login and account-creation screen also supports Google Identity Services and GitHub OAuth. Google ID tokens are verified by the API, and GitHub's OAuth state is checked before the API reads the user's verified email. Both providers can securely connect to an existing PlacementGap account when the provider proves ownership of the same email. Google sign-in requires a verified Gmail or Google Workspace address. GitHub asks only for public profile and email (`read:user user:email`) and does not retain its access token.
+
+Configure Google in Google Cloud Console: create an OAuth client with application type **Web application**, set up the OAuth consent screen, and add `https://placementgap.onrender.com` under **Authorized JavaScript origins**. For local testing, add `http://localhost:5173` and `http://127.0.0.1:5173`. This Google button uses the Google Identity Services JavaScript callback, so it does not need an Authorized redirect URI or a Google client secret. Add the resulting client ID to Render as `PLACEMENTGAP_GOOGLE_CLIENT_ID`.
+
+Configure GitHub under **Settings → Developer settings → OAuth Apps → New OAuth App**. Use `https://placementgap.onrender.com` as the homepage and `https://placementgap.onrender.com/api/auth/oauth/github/callback` as the Authorization callback URL. Add its client ID to Render as `PLACEMENTGAP_GITHUB_CLIENT_ID`, then generate a client secret and add it as `PLACEMENTGAP_GITHUB_CLIENT_SECRET`. GitHub users need at least one verified email address. For local GitHub testing, create a separate OAuth App with homepage `http://localhost:5173` and callback `http://localhost:5173/api/auth/oauth/github/callback`, then temporarily use those local credentials in `.env`.
+
+In Render, open the `placementgap` web service → **Environment**, add the three variables above, save, and redeploy. Keep the GitHub client secret server-side; never put it in the React code or commit it. Google's client ID is public and is served to the browser so the official Google button can initialize. These sign-in methods authenticate a Google/GitHub account only; PlacementGap does not access Gmail or GitHub repositories.
 
 ## Optional model extraction
 

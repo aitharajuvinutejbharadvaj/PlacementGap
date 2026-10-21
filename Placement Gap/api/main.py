@@ -5,6 +5,7 @@ import base64
 import hashlib
 import hmac
 import json
+import logging
 import os
 import re
 import secrets
@@ -12,13 +13,17 @@ import sqlite3
 import time
 import uuid
 from collections.abc import AsyncIterator
+from html import escape
 from pathlib import Path
 from time import perf_counter
 from typing import Annotated, Any
+from urllib.parse import quote, urlencode
+from urllib.error import HTTPError, URLError
+from urllib.request import Request as UrlRequest, urlopen
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from agent.graph import run_pipeline
@@ -33,6 +38,9 @@ from memory.profile_store import ProfileStore
 from ontology.canonicalizer import find_mentions
 
 ROOT = Path(__file__).resolve().parents[1]
+LOGGER = logging.getLogger(__name__)
+VERIFICATION_TTL_SECONDS = 30 * 60
+VERIFICATION_RESEND_COOLDOWN_SECONDS = 60
 
 
 def _load_local_env() -> None:
@@ -89,10 +97,31 @@ async def require_account_session(request: Request, call_next):  # type: ignore[
     path = request.url.path
     if path.startswith("/api/"):
         path = path[4:]
-    if path in {"/health", "/auth/register", "/auth/login", "/auth/session", "/auth/logout"}:
+    if path in {
+        "/health",
+        "/auth/register",
+        "/auth/login",
+        "/auth/session",
+        "/auth/logout",
+        "/auth/verify",
+        "/auth/resend-verification",
+        "/auth/providers",
+        "/auth/google",
+    }:
         return await call_next(request)
-    if not _decode_session(request.cookies.get("placementgap_session")):
+    if path.startswith("/auth/oauth/"):
+        return await call_next(request)
+    user = _decode_session(request.cookies.get("placementgap_session"))
+    if user is None:
         return JSONResponse({"detail": "Sign in or create an account to continue."}, status_code=401)
+    with db() as conn:
+        row = conn.execute(
+            "SELECT email_verified FROM users WHERE user_id=?", (user["sub"],)
+        ).fetchone()
+    if row is None or not bool(row["email_verified"]):
+        return JSONResponse(
+            {"detail": "Verify your email address before continuing."}, status_code=401
+        )
     return await call_next(request)
 
 
@@ -103,7 +132,25 @@ def db() -> sqlite3.Connection:
         "CREATE TABLE IF NOT EXISTS runs (run_id TEXT PRIMARY KEY, status TEXT NOT NULL, state TEXT, paths TEXT, error TEXT, updated REAL NOT NULL)"
     )
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL, password_salt TEXT NOT NULL, password_hash TEXT NOT NULL, created REAL NOT NULL)"
+        "CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL, password_salt TEXT NOT NULL, password_hash TEXT NOT NULL, created REAL NOT NULL, email_verified INTEGER NOT NULL DEFAULT 0, verification_token_hash TEXT, verification_expires REAL, verification_sent REAL)"
+    )
+    # Legacy accounts must prove mailbox access once before signing in again.
+    existing_columns = {str(row[1]) for row in conn.execute("PRAGMA table_info(users)")}
+    for column, declaration in (
+        ("email_verified", "INTEGER NOT NULL DEFAULT 0"),
+        ("verification_token_hash", "TEXT"),
+        ("verification_expires", "REAL"),
+        ("verification_sent", "REAL"),
+        ("google_sub", "TEXT"),
+        ("github_sub", "TEXT"),
+    ):
+        if column not in existing_columns:
+            conn.execute(f"ALTER TABLE users ADD COLUMN {column} {declaration}")
+    conn.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS users_google_sub_unique ON users(google_sub) WHERE google_sub IS NOT NULL"
+    )
+    conn.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS users_github_sub_unique ON users(github_sub) WHERE github_sub IS NOT NULL"
     )
     conn.commit()
     return conn
@@ -137,6 +184,18 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: str = Field(min_length=3, max_length=254)
     password: str = Field(min_length=1, max_length=128)
+
+
+class VerifyEmailRequest(BaseModel):
+    token: str = Field(min_length=20, max_length=200)
+
+
+class ResendVerificationRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=254)
+
+
+class GoogleCredentialRequest(BaseModel):
+    credential: str = Field(min_length=100, max_length=12_000)
 
 
 class GuideRequest(BaseModel):
@@ -588,7 +647,12 @@ async def guide_recommendations_upload(resume_file: Annotated[UploadFile, File()
 
 def _account_response(user: dict[str, str], status_code: int = 200) -> JSONResponse:
     result = JSONResponse({"user": user}, status_code=status_code)
-    result.set_cookie(
+    _set_session_cookie(result, user)
+    return result
+
+
+def _set_session_cookie(response: JSONResponse | RedirectResponse, user: dict[str, str]) -> None:
+    response.set_cookie(
         "placementgap_session",
         _encode_session(user),
         max_age=60 * 60 * 24 * 7,
@@ -597,7 +661,6 @@ def _account_response(user: dict[str, str], status_code: int = 200) -> JSONRespo
         samesite="lax",
         path="/",
     )
-    return result
 
 
 def _user_payload(row: sqlite3.Row) -> dict[str, str]:
@@ -608,20 +671,237 @@ def _password_digest(password: str, salt: bytes) -> bytes:
     return hashlib.scrypt(password.encode("utf-8"), salt=salt, n=2**14, r=8, p=1, dklen=32)
 
 
-@app.post("/auth/register", status_code=201)
-async def register_account(body: RegisterRequest) -> JSONResponse:
+def _origin(value: str) -> str:
+    from urllib.parse import urlsplit
+
+    parsed = urlsplit(value)
+    return f"{parsed.scheme.lower()}://{parsed.netloc.lower()}" if parsed.scheme and parsed.netloc else ""
+
+
+def _check_browser_origin(request: Request) -> None:
+    supplied = _origin(request.headers.get("origin", ""))
+    allowed = {_origin(_public_url(request)), "http://localhost:5173", "http://127.0.0.1:5173"}
+    if not supplied or supplied not in allowed:
+        raise HTTPException(403, "The sign-in request did not come from this website.")
+
+
+def _oauth_account(provider: str, subject: str, email: str, name: str) -> dict[str, str]:
+    if provider not in {"google", "github"}:
+        raise ValueError("Unsupported identity provider.")
+    email = email.strip().casefold()
+    name = name.strip()[:100] or email.partition("@")[0] or "PlacementGap member"
+    if not subject or len(subject) > 255 or not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email):
+        raise HTTPException(401, "The identity provider did not return a verified account.")
+    provider_column = f"{provider}_sub"
+    try:
+        with db() as conn:
+            row = conn.execute(
+                f"SELECT * FROM users WHERE {provider_column}=?", (subject,)
+            ).fetchone()
+            if row is None:
+                row = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+                if row is not None and row[provider_column] not in (None, subject):
+                    raise HTTPException(
+                        409,
+                        "This email is already linked to a different provider account. Sign in with the linked method first.",
+                    )
+                if row is not None:
+                    conn.execute(
+                        f"UPDATE users SET {provider_column}=?,email_verified=1 WHERE user_id=?",
+                        (subject, row["user_id"]),
+                    )
+                    row = conn.execute(
+                        "SELECT * FROM users WHERE user_id=?", (row["user_id"],)
+                    ).fetchone()
+                else:
+                    salt = secrets.token_bytes(16)
+                    random_password = secrets.token_urlsafe(48)
+                    cursor = conn.execute(
+                        f"INSERT INTO users(email,name,password_salt,password_hash,created,email_verified,{provider_column}) VALUES(?,?,?,?,?,1,?)",
+                        (email, name, salt.hex(), _password_digest(random_password, salt).hex(), time.time(), subject),
+                    )
+                    row = conn.execute(
+                        "SELECT * FROM users WHERE user_id=?", (cursor.lastrowid,)
+                    ).fetchone()
+            else:
+                # Keep a user's account email stable if a provider changes its email later.
+                conn.execute(
+                    "UPDATE users SET name=?,email_verified=1 WHERE user_id=?",
+                    (name, row["user_id"]),
+                )
+                row = conn.execute("SELECT * FROM users WHERE user_id=?", (row["user_id"],)).fetchone()
+    except sqlite3.IntegrityError as exc:
+        raise HTTPException(409, "This provider account is already connected to another PlacementGap account.") from exc
+    if row is None:
+        raise HTTPException(500, "Could not open your PlacementGap account.")
+    return _user_payload(row)
+
+
+def _provider_http_json(
+    url: str, *, method: str = "GET", data: dict[str, str] | None = None, headers: dict[str, str] | None = None
+) -> Any:
+    payload = urlencode(data).encode("utf-8") if data is not None else None
+    request = UrlRequest(
+        url,
+        data=payload,
+        headers={"User-Agent": "PlacementGap/1.0", "Accept": "application/json", **(headers or {})},
+        method=method,
+    )
+    try:
+        with urlopen(request, timeout=15) as response:
+            return json.loads(response.read(1_000_000).decode("utf-8"))
+    except (HTTPError, URLError, TimeoutError, ValueError) as exc:
+        raise RuntimeError("The identity provider could not complete sign-in.") from exc
+
+
+async def _notify_oauth_sign_in(user: dict[str, str], request: Request) -> None:
+    try:
+        await asyncio.to_thread(
+            _send_login_notification, user["email"], user["name"], _public_url(request)
+        )
+    except Exception:  # noqa: BLE001 - notification outages must not block provider sign-in
+        LOGGER.exception("PlacementGap provider sign-in notice could not be delivered")
+
+
+def _mail_settings() -> tuple[str, str] | None:
+    api_key = os.getenv("PLACEMENTGAP_RESEND_API_KEY", "").strip()
+    sender = os.getenv("PLACEMENTGAP_MAIL_FROM", "").strip()
+    if not api_key or not sender:
+        return None
+    return api_key, sender
+
+
+def _send_email(recipient: str, subject: str, text: str, html_body: str) -> None:
+    settings = _mail_settings()
+    if settings is None:
+        raise RuntimeError("Email delivery is not configured on this PlacementGap deployment.")
+    api_key, sender = settings
+    payload = json.dumps(
+        {"from": sender, "to": [recipient], "subject": subject, "text": text, "html": html_body}
+    ).encode("utf-8")
+    request = UrlRequest(
+        "https://api.resend.com/emails",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "PlacementGap/1.0",
+        },
+        method="POST",
+    )
+    try:
+        with urlopen(request, timeout=15) as response:
+            if not 200 <= response.status < 300:
+                raise RuntimeError(f"Email provider rejected the message (HTTP {response.status}).")
+            # Consume the response so the connection can be reused/closed cleanly.
+            response.read(4096)
+    except HTTPError as exc:
+        raise RuntimeError(f"Email provider rejected the message (HTTP {exc.code}).") from exc
+    except URLError as exc:
+        raise RuntimeError("Could not reach the email provider.") from exc
+
+
+def _public_url(request: Request) -> str:
+    configured = os.getenv("PLACEMENTGAP_PUBLIC_URL", "").strip().rstrip("/")
+    if configured:
+        return configured
+    if request.url.hostname in {"localhost", "127.0.0.1"}:
+        return "http://localhost:5173"
+    return str(request.base_url).rstrip("/")
+
+
+def _issue_verification(user_id: int) -> str:
+    token = secrets.token_urlsafe(36)
+    now = time.time()
+    with db() as conn:
+        conn.execute(
+            "UPDATE users SET verification_token_hash=?, verification_expires=?, verification_sent=? WHERE user_id=?",
+            (hashlib.sha256(token.encode()).hexdigest(), now + VERIFICATION_TTL_SECONDS, now, user_id),
+        )
+    return token
+
+
+def _send_verification_email(recipient: str, name: str, token: str, site_url: str) -> None:
+    link = f"{site_url}/?verify={quote(token, safe='')}"
+    safe_name = escape(name)
+    safe_link = escape(link, quote=True)
+    html_body = f"""
+    <div style="margin:0;background:#f7f5fb;padding:32px;font-family:Arial,sans-serif;color:#27243a">
+      <div style="max-width:560px;margin:auto;background:#fff;border:1px solid #e8e2f2;border-radius:18px;padding:34px">
+        <p style="margin:0 0 10px;color:#7754d6;font-size:12px;font-weight:700;letter-spacing:2px">PLACEMENTGAP</p>
+        <h1 style="margin:0 0 12px;font-size:25px">Verify your email</h1>
+        <p style="line-height:1.65;color:#625d70">Hi {safe_name}, confirm that you own this email address to finish creating your account.</p>
+        <p style="margin:26px 0"><a href="{safe_link}" style="display:inline-block;padding:13px 20px;border-radius:9px;background:#7655d7;color:#fff;text-decoration:none;font-weight:700">Verify email address</a></p>
+        <p style="font-size:13px;line-height:1.6;color:#777287">This secure link expires in 30 minutes. If you did not create this account, you can ignore this message.</p>
+      </div>
+    </div>
+    """
+    _send_email(
+        recipient,
+        "Verify your PlacementGap email",
+        (
+            f"Hi {name},\n\n"
+            "Verify that you own this email address to finish creating your PlacementGap account.\n\n"
+            f"Open this link within 30 minutes: {link}\n\n"
+            "If you did not create this account, you can ignore this message."
+        ),
+        html_body,
+    )
+
+
+def _send_login_notification(recipient: str, name: str, site_url: str) -> None:
+    logged_in_at = time.strftime("%B %d, %Y at %H:%M UTC", time.gmtime())
+    safe_name = escape(name)
+    safe_url = escape(site_url, quote=True)
+    html_body = f"""
+    <div style="margin:0;background:#f7f5fb;padding:32px;font-family:Arial,sans-serif;color:#27243a">
+      <div style="max-width:560px;margin:auto;background:#fff;border:1px solid #e8e2f2;border-radius:18px;padding:34px">
+        <p style="margin:0 0 10px;color:#7754d6;font-size:12px;font-weight:700;letter-spacing:2px">PLACEMENTGAP SECURITY</p>
+        <h1 style="margin:0 0 12px;font-size:25px">New sign-in detected</h1>
+        <p style="line-height:1.65;color:#625d70">Hi {safe_name}, your PlacementGap account was signed into successfully.</p>
+        <div style="margin:22px 0;padding:16px;border-radius:10px;background:#f7f5fb;color:#514b61">{escape(logged_in_at)}</div>
+        <p style="font-size:13px;line-height:1.6;color:#777287">If this was you, no action is needed. If you do not recognize this activity, contact the PlacementGap administrator.</p>
+        <p style="margin:24px 0 0"><a href="{safe_url}" style="color:#7050ce;font-weight:700">Open PlacementGap</a></p>
+      </div>
+    </div>
+    """
+    _send_email(
+        recipient,
+        "New sign-in to your PlacementGap account",
+        (
+            f"Hi {name},\n\n"
+            f"A successful sign-in to your PlacementGap account was completed on {logged_in_at}.\n\n"
+            "If this was you, no action is needed. If you do not recognize this activity, "
+            "contact the PlacementGap administrator.\n\n"
+            f"Open PlacementGap: {site_url}"
+        ),
+        html_body,
+    )
+
+
+@app.post("/auth/register", status_code=202)
+async def register_account(body: RegisterRequest, request: Request) -> JSONResponse:
     email = body.email.strip().casefold()
     name = body.name.strip()
     if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email):
         raise HTTPException(422, "Enter a valid email address.")
     if not name:
         raise HTTPException(422, "Enter your name.")
+    try:
+        mail_settings = _mail_settings()
+    except RuntimeError as exc:
+        raise HTTPException(503, str(exc)) from exc
+    if mail_settings is None:
+        raise HTTPException(
+            503,
+            "Email verification is not configured yet. Add the Resend API key and verified sender address to the server before creating an account.",
+        )
     salt = secrets.token_bytes(16)
     digest = _password_digest(body.password, salt)
     try:
         with db() as conn:
             cursor = conn.execute(
-                "INSERT INTO users(email,name,password_salt,password_hash,created) VALUES(?,?,?,?,?)",
+                "INSERT INTO users(email,name,password_salt,password_hash,created,email_verified) VALUES(?,?,?,?,?,0)",
                 (email, name, salt.hex(), digest.hex(), time.time()),
             )
             row = conn.execute("SELECT * FROM users WHERE user_id=?", (cursor.lastrowid,)).fetchone()
@@ -629,11 +909,30 @@ async def register_account(body: RegisterRequest) -> JSONResponse:
         raise HTTPException(409, "An account with this email already exists. Sign in instead.") from exc
     if row is None:
         raise HTTPException(500, "Could not create your account.")
-    return _account_response(_user_payload(row), status_code=201)
+    token = _issue_verification(int(row["user_id"]))
+    try:
+        await asyncio.to_thread(_send_verification_email, email, name, token, _public_url(request))
+    except Exception as exc:  # noqa: BLE001 - expose a safe setup message, not provider details
+        LOGGER.exception("PlacementGap verification email could not be delivered")
+        with db() as conn:
+            conn.execute(
+                "UPDATE users SET verification_sent=NULL WHERE user_id=?", (row["user_id"],)
+            )
+        raise HTTPException(
+            503,
+            "Your account was created, but the verification email could not be delivered. Check the server email settings, then request a new verification link.",
+        ) from exc
+    return JSONResponse(
+        {
+            "message": "Verification email sent. Open the secure link in your inbox to activate your account.",
+            "email": email,
+        },
+        status_code=202,
+    )
 
 
 @app.post("/auth/login")
-async def login_account(body: LoginRequest) -> JSONResponse:
+async def login_account(body: LoginRequest, request: Request) -> JSONResponse:
     email = body.email.strip().casefold()
     with db() as conn:
         row = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
@@ -642,12 +941,238 @@ async def login_account(body: LoginRequest) -> JSONResponse:
     supplied = _password_digest(body.password, salt)
     if row is None or not hmac.compare_digest(supplied, expected):
         raise HTTPException(401, "Email or password is incorrect.")
-    return _account_response(_user_payload(row))
+    if not bool(row["email_verified"]):
+        raise HTTPException(
+            403,
+            "Verify your email address before signing in. Request a fresh verification link below.",
+        )
+    user = _user_payload(row)
+    try:
+        await asyncio.to_thread(
+            _send_login_notification, email, str(row["name"]), _public_url(request)
+        )
+    except Exception:  # noqa: BLE001 - a mail-provider outage must not lock out verified users
+        LOGGER.exception("PlacementGap sign-in notice could not be delivered to %s", email)
+    return _account_response(user)
+
+
+@app.get("/auth/providers")
+async def auth_providers() -> dict[str, Any]:
+    return {
+        "google_client_id": os.getenv("PLACEMENTGAP_GOOGLE_CLIENT_ID", "").strip(),
+        "github_enabled": bool(
+            os.getenv("PLACEMENTGAP_GITHUB_CLIENT_ID", "").strip()
+            and os.getenv("PLACEMENTGAP_GITHUB_CLIENT_SECRET", "").strip()
+        ),
+    }
+
+
+@app.post("/auth/google")
+async def google_sign_in(body: GoogleCredentialRequest, request: Request) -> JSONResponse:
+    _check_browser_origin(request)
+    client_id = os.getenv("PLACEMENTGAP_GOOGLE_CLIENT_ID", "").strip()
+    if not client_id:
+        raise HTTPException(503, "Google sign-in is not configured yet.")
+    try:
+        from google.auth.transport.requests import Request as GoogleAuthRequest
+        from google.oauth2 import id_token
+
+        claims = await asyncio.to_thread(
+            id_token.verify_oauth2_token, body.credential, GoogleAuthRequest(), client_id
+        )
+    except Exception as exc:  # noqa: BLE001 - reject invalid tokens without exposing provider details
+        LOGGER.info("Google sign-in token verification failed")
+        raise HTTPException(401, "Google could not verify this sign-in. Please try again.") from exc
+    email = str(claims.get("email", "")).strip().casefold()
+    is_google_hosted = email.endswith("@gmail.com") or bool(claims.get("hd"))
+    if not claims.get("sub") or not claims.get("email_verified") or not is_google_hosted:
+        raise HTTPException(401, "Use a verified Gmail or Google Workspace account to continue.")
+    user = _oauth_account(
+        "google", str(claims["sub"]), email, str(claims.get("name", ""))
+    )
+    await _notify_oauth_sign_in(user, request)
+    return _account_response(user)
+
+
+@app.get("/auth/oauth/github/start")
+async def github_oauth_start(request: Request) -> RedirectResponse:
+    client_id = os.getenv("PLACEMENTGAP_GITHUB_CLIENT_ID", "").strip()
+    client_secret = os.getenv("PLACEMENTGAP_GITHUB_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        return RedirectResponse("/?auth_error=github_setup", status_code=303)
+    state = secrets.token_urlsafe(32)
+    callback = f"{_public_url(request)}/api/auth/oauth/github/callback"
+    params = urlencode(
+        {
+            "client_id": client_id,
+            "redirect_uri": callback,
+            "scope": "read:user user:email",
+            "state": state,
+        }
+    )
+    response = RedirectResponse(
+        f"https://github.com/login/oauth/authorize?{params}", status_code=302
+    )
+    response.set_cookie(
+        "placementgap_github_state",
+        state,
+        max_age=600,
+        httponly=True,
+        secure=os.getenv("PLACEMENTGAP_HTTPS", "false").lower() == "true",
+        samesite="lax",
+        path="/api/auth/oauth/github",
+    )
+    return response
+
+
+@app.get("/auth/oauth/github/callback")
+async def github_oauth_callback(request: Request) -> RedirectResponse:
+    def finish(error: str) -> RedirectResponse:
+        response = RedirectResponse(f"/?auth_error={quote(error)}", status_code=303)
+        response.delete_cookie("placementgap_github_state", path="/api/auth/oauth/github")
+        return response
+
+    query = request.query_params
+    if query.get("error"):
+        return finish("github_cancelled" if query.get("error") == "access_denied" else "github_failed")
+    state_cookie = request.cookies.get("placementgap_github_state", "")
+    state_query = query.get("state", "")
+    code = query.get("code", "")
+    if not state_cookie or not state_query or not hmac.compare_digest(state_cookie, state_query) or not code:
+        return finish("github_failed")
+
+    client_id = os.getenv("PLACEMENTGAP_GITHUB_CLIENT_ID", "").strip()
+    client_secret = os.getenv("PLACEMENTGAP_GITHUB_CLIENT_SECRET", "").strip()
+    if not client_id or not client_secret:
+        return finish("github_setup")
+    callback = f"{_public_url(request)}/api/auth/oauth/github/callback"
+    try:
+        token_response = await asyncio.to_thread(
+            _provider_http_json,
+            "https://github.com/login/oauth/access_token",
+            method="POST",
+            data={
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "code": code,
+                "redirect_uri": callback,
+            },
+        )
+        access_token = str(token_response.get("access_token", ""))
+        if not access_token or token_response.get("error"):
+            return finish("github_failed")
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        profile, emails = await asyncio.gather(
+            asyncio.to_thread(
+                _provider_http_json,
+                "https://api.github.com/user",
+                headers=headers,
+            ),
+            asyncio.to_thread(
+                _provider_http_json,
+                "https://api.github.com/user/emails",
+                headers=headers,
+            ),
+        )
+        verified_emails = [
+            address
+            for address in emails
+            if isinstance(address, dict)
+            and address.get("verified") is True
+            and isinstance(address.get("email"), str)
+        ]
+        email_row = next((entry for entry in verified_emails if entry.get("primary") is True), None)
+        if email_row is None and verified_emails:
+            email_row = verified_emails[0]
+        if email_row is None or not profile.get("id"):
+            return finish("github_email_required")
+        user = _oauth_account(
+            "github",
+            str(profile["id"]),
+            str(email_row["email"]),
+            str(profile.get("name") or profile.get("login") or ""),
+        )
+        await _notify_oauth_sign_in(user, request)
+        response = RedirectResponse("/", status_code=303)
+        response.delete_cookie("placementgap_github_state", path="/api/auth/oauth/github")
+        _set_session_cookie(response, user)
+        return response
+    except HTTPException as exc:
+        if exc.status_code == 409:
+            return finish("account_conflict")
+        LOGGER.info("GitHub account sign-in was rejected")
+        return finish("github_failed")
+    except Exception:  # noqa: BLE001 - provider network errors are safe to retry
+        LOGGER.exception("GitHub OAuth sign-in failed")
+        return finish("github_failed")
+
+
+@app.post("/auth/verify")
+async def verify_email(body: VerifyEmailRequest) -> dict[str, str]:
+    token_hash = hashlib.sha256(body.token.encode()).hexdigest()
+    now = time.time()
+    with db() as conn:
+        row = conn.execute(
+            "SELECT user_id,email FROM users WHERE verification_token_hash=? AND verification_expires>=?",
+            (token_hash, now),
+        ).fetchone()
+        if row is None:
+            raise HTTPException(
+                400,
+                "This verification link is invalid or has expired. Request a new one and try again.",
+            )
+        conn.execute(
+            "UPDATE users SET email_verified=1, verification_token_hash=NULL, verification_expires=NULL WHERE user_id=?",
+            (row["user_id"],),
+        )
+    return {"message": "Email verified. You can now sign in.", "email": str(row["email"])}
+
+
+@app.post("/auth/resend-verification")
+async def resend_verification(
+    body: ResendVerificationRequest, request: Request
+) -> dict[str, str]:
+    email = body.email.strip().casefold()
+    if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email):
+        raise HTTPException(422, "Enter a valid email address.")
+    try:
+        mail_settings = _mail_settings()
+    except RuntimeError as exc:
+        raise HTTPException(503, str(exc)) from exc
+    if mail_settings is None:
+        raise HTTPException(503, "Email delivery is not configured on this PlacementGap deployment.")
+    with db() as conn:
+        row = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+    generic_message = "If this email has an unverified PlacementGap account, a verification link will be sent."
+    if row is None or bool(row["email_verified"]):
+        return {"message": generic_message}
+    sent_at = row["verification_sent"]
+    if sent_at and time.time() - float(sent_at) < VERIFICATION_RESEND_COOLDOWN_SECONDS:
+        return {"message": generic_message}
+    token = _issue_verification(int(row["user_id"]))
+    try:
+        await asyncio.to_thread(
+            _send_verification_email, email, str(row["name"]), token, _public_url(request)
+        )
+    except Exception as exc:  # noqa: BLE001 - keep provider diagnostics out of the response
+        LOGGER.exception("PlacementGap verification email resend failed")
+        raise HTTPException(503, "We could not send the email right now. Try again later.") from exc
+    return {"message": generic_message}
 
 
 @app.get("/auth/session")
 async def auth_session(request: Request) -> dict[str, Any]:
     user = _decode_session(request.cookies.get("placementgap_session"))
+    if user is not None:
+        with db() as conn:
+            row = conn.execute(
+                "SELECT email_verified FROM users WHERE user_id=?", (user["sub"],)
+            ).fetchone()
+        if row is None or not bool(row["email_verified"]):
+            user = None
     return {"user": user}
 
 

@@ -11,5 +11,17 @@ services:
         value: "1"
       - key: PLACEMENTGAP_HTTPS
         value: "true"
+      - key: PLACEMENTGAP_PUBLIC_URL
+        value: https://placementgap.onrender.com
       - key: PLACEMENTGAP_SESSION_SECRET
         generateValue: true
+      - key: PLACEMENTGAP_RESEND_API_KEY
+        sync: false
+      - key: PLACEMENTGAP_MAIL_FROM
+        sync: false
+      - key: PLACEMENTGAP_GOOGLE_CLIENT_ID
+        sync: false
+      - key: PLACEMENTGAP_GITHUB_CLIENT_ID
+        sync: false
+      - key: PLACEMENTGAP_GITHUB_CLIENT_SECRET
+        sync: false
