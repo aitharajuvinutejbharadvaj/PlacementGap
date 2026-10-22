@@ -906,7 +906,7 @@ async def register_account(body: RegisterRequest, request: Request) -> JSONRespo
     email = body.email.strip().casefold()
     name = body.name.strip()
     if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", email):
-        raise HTTPException(422, "Enter a valid email address.")
+        raise HTTPException(422, "Enter a complete email address, for example name@gmail.com.")
     if not name:
         raise HTTPException(422, "Enter your name.")
     try:
@@ -942,11 +942,11 @@ async def register_account(body: RegisterRequest, request: Request) -> JSONRespo
             )
         raise HTTPException(
             503,
-            "Your account was created, but the verification email could not be delivered. Check the server email settings, then request a new verification link.",
+            "Your account was created but is still unverified. We couldn't deliver a verification email to this address. Check that it exists, is spelled correctly, and can receive mail; if it is correct, try again later. You can request a new verification link after fixing the issue.",
         ) from exc
     return JSONResponse(
         {
-            "message": "Verification email sent. Open the secure link in your inbox to activate your account.",
+            "message": "We sent a verification link to this address. Open it to prove you can receive the email and activate your account. If it doesn't arrive, check the spelling and spam folder; an address that cannot receive mail cannot be verified.",
             "email": email,
         },
         status_code=202,
@@ -1181,7 +1181,10 @@ async def resend_verification(
         )
     except Exception as exc:
         LOGGER.exception("PlacementGap verification email resend failed")
-        raise HTTPException(503, "We could not send the email right now. Try again later.") from exc
+        raise HTTPException(
+            503,
+            "We couldn't deliver a verification email to this address. Check that it exists, is spelled correctly, and can receive mail; if it is correct, try again later.",
+        ) from exc
     return {"message": generic_message}
 
 
