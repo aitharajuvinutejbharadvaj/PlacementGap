@@ -3,9 +3,8 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from urllib.parse import quote_plus
 from typing import Any
-
+from urllib.parse import quote_plus
 
 DATA = Path(__file__).parent / "data"
 
@@ -191,7 +190,7 @@ def _slug(value: str) -> str:
 
 def engineering_skill_names() -> list[str]:
     names: set[str] = set()
-    for branch, roles in ROLE_ROWS.items():
+    for roles in ROLE_ROWS.values():
         names.update(roles[0][3])
         for _, _, _, required, preferred in roles:
             names.update(required)

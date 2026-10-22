@@ -11,7 +11,8 @@ from agent.tools.build_schedule import build_schedule, score_gaps
 from agent.tools.estimate_effort import estimate_effort
 from agent.tools.plan_validity import check_plan
 from ontology.canonicalizer import find_mentions
-from ontology.graph import SKILLS, adjacent, ancestors
+from ontology.graph import SKILLS
+from ontology.graph import related as related_skill_ids
 
 LEVEL = {"aware": 0, "can_use": 1, "can_build": 2, "can_design": 3}
 LEVEL_LABELS = {
@@ -119,7 +120,7 @@ def run_pipeline(
                 on_node({"event": "node_end", "node": row.model_dump(mode="json")})
     else:
         prof = s.profile_text
-        records = []
+        records_by_skill: dict[str, SkillEvidence] = {}
         for start, end, skill in find_mentions(prof):
             lvl = (
                 "can_build"
@@ -130,27 +131,30 @@ def run_pipeline(
                 )
                 else "can_use"
             )
-            records.append(
-                SkillEvidence(
-                    skill_id=skill["id"],
-                    level=lvl,
-                    evidence=[
-                        Evidence(
-                            source_doc_id="student_profile",
-                            char_span=(start, end),
-                            quote=prof[start:end],
-                            extractor_confidence=0.83,
-                        )
-                    ],
-                )
+            evidence = Evidence(
+                source_doc_id="student_profile",
+                char_span=(start, end),
+                quote=prof[start:end],
+                extractor_confidence=0.83,
             )
+            existing = records_by_skill.get(skill["id"])
+            if existing is None:
+                records_by_skill[skill["id"]] = SkillEvidence(
+                    skill_id=skill["id"], level=lvl, evidence=[evidence]
+                )
+            elif LEVEL[lvl] > LEVEL[existing.level]:
+                existing.level = lvl
+                existing.evidence.insert(0, evidence)
+            else:
+                existing.evidence.append(evidence)
+        records = list(records_by_skill.values())
         _trace(s, "profile_parse", on_node=on_node)
         _trace(s, "profile_normalize", on_node=on_node)
     s.evidence = records
     prof_map = {e.skill_id: e for e in records}
     for req in s.requirements:
         direct = prof_map.get(req.skill_id)
-        related_ids = ancestors(req.skill_id) | adjacent(req.skill_id)
+        related_ids = related_skill_ids(req.skill_id)
         related = [prof_map[a] for a in related_ids if a in prof_map]
         related_skill_names = sorted(
             {

@@ -72,6 +72,26 @@ class CoreTests(unittest.TestCase):
         )
         self.assertEqual(state.gaps[0].verdict, "partial")
 
+    def test_specialization_is_partial_evidence_for_its_prerequisite(self):
+        state = run_pipeline("Used PostgreSQL for project data.", "Role requires SQL.", 4, 6)
+        gap = next(item for item in state.gaps if item.skill_id == "sql")
+        self.assertEqual(gap.verdict, "partial")
+        self.assertEqual(gap.evidence_basis, "related")
+        self.assertIn("PostgreSQL", gap.related_skills)
+
+    def test_repeated_mentions_keep_strongest_resume_evidence(self):
+        profile = (
+            "Built a Python service. "
+            + ("Course notes without skill details. " * 8)
+            + "Python coursework."
+        )
+        state = run_pipeline(profile, "Role requires Python.", 4, 6)
+        gap = next(item for item in state.gaps if item.skill_id == "python")
+        self.assertEqual(gap.verdict, "has")
+        self.assertEqual(gap.demonstrated_level, "can_build")
+        self.assertEqual(len(gap.evidence), 2)
+        self.assertIn("Python", gap.evidence[0].quote)
+
     def test_prerequisites_are_scheduled_before_dependents(self):
         state = run_pipeline("No experience listed.", "Role requires System Design.", 8, 6)
         plan = [x for x in state.plan if x.status == "scheduled"]

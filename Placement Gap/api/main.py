@@ -17,9 +17,10 @@ from html import escape
 from pathlib import Path
 from time import perf_counter
 from typing import Annotated, Any
-from urllib.parse import quote, urlencode
 from urllib.error import HTTPError, URLError
-from urllib.request import Request as UrlRequest, urlopen
+from urllib.parse import quote, urlencode
+from urllib.request import Request as UrlRequest
+from urllib.request import urlopen
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -780,7 +781,7 @@ async def _notify_oauth_sign_in(user: dict[str, str], request: Request) -> None:
         await asyncio.to_thread(
             _send_login_notification, user["email"], user["name"], _public_url(request)
         )
-    except Exception:  # noqa: BLE001 - notification outages must not block provider sign-in
+    except Exception:
         LOGGER.exception("PlacementGap provider sign-in notice could not be delivered")
 
 
@@ -933,7 +934,7 @@ async def register_account(body: RegisterRequest, request: Request) -> JSONRespo
     token = _issue_verification(int(row["user_id"]))
     try:
         await asyncio.to_thread(_send_verification_email, email, name, token, _public_url(request))
-    except Exception as exc:  # noqa: BLE001 - expose a safe setup message, not provider details
+    except Exception as exc:
         LOGGER.exception("PlacementGap verification email could not be delivered")
         with db() as conn:
             conn.execute(
@@ -972,7 +973,7 @@ async def login_account(body: LoginRequest, request: Request) -> JSONResponse:
         await asyncio.to_thread(
             _send_login_notification, email, str(row["name"]), _public_url(request)
         )
-    except Exception:  # noqa: BLE001 - a mail-provider outage must not lock out verified users
+    except Exception:
         LOGGER.exception("PlacementGap sign-in notice could not be delivered to %s", email)
     return _account_response(user)
 
@@ -1001,7 +1002,7 @@ async def google_sign_in(body: GoogleCredentialRequest, request: Request) -> JSO
         claims = await asyncio.to_thread(
             id_token.verify_oauth2_token, body.credential, GoogleAuthRequest(), client_id
         )
-    except Exception as exc:  # noqa: BLE001 - reject invalid tokens without exposing provider details
+    except Exception as exc:
         LOGGER.info("Google sign-in token verification failed")
         raise HTTPException(401, "Google could not verify this sign-in. Please try again.") from exc
     email = str(claims.get("email", "")).strip().casefold()
@@ -1126,7 +1127,7 @@ async def github_oauth_callback(request: Request) -> RedirectResponse:
             return finish("account_conflict")
         LOGGER.info("GitHub account sign-in was rejected")
         return finish("github_failed")
-    except Exception:  # noqa: BLE001 - provider network errors are safe to retry
+    except Exception:
         LOGGER.exception("GitHub OAuth sign-in failed")
         return finish("github_failed")
 
@@ -1178,7 +1179,7 @@ async def resend_verification(
         await asyncio.to_thread(
             _send_verification_email, email, str(row["name"]), token, _public_url(request)
         )
-    except Exception as exc:  # noqa: BLE001 - keep provider diagnostics out of the response
+    except Exception as exc:
         LOGGER.exception("PlacementGap verification email resend failed")
         raise HTTPException(503, "We could not send the email right now. Try again later.") from exc
     return {"message": generic_message}
