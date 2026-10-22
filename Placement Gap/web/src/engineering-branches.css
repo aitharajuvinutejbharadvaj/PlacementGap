@@ -1,0 +1,21 @@
+.catalog-filter-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:-14px 0 20px;padding:16px 18px;border:1px solid #2b3a30;border-radius:12px;background:linear-gradient(110deg,#17231b,#131a16)}
+.catalog-branch-select,.guide-branch-field{display:grid;gap:8px;width:min(100%,430px)}
+.catalog-branch-select>span,.guide-branch-field>span{color:#91a399;font:600 10px 'DM Mono',monospace;letter-spacing:1px}
+.catalog-branch-select select,.guide-branch-field select{width:100%;min-height:46px;padding:0 42px 0 14px;border:1px solid #35473a;border-radius:8px;background:#101713;color:#e5eee7;font:600 14px 'DM Sans',sans-serif;outline:0;cursor:pointer}
+.catalog-branch-select select:focus,.guide-branch-field select:focus{border-color:#78c995;box-shadow:0 0 0 3px #78c99522}
+.catalog-branch-select option,.guide-branch-field option,.role-select option{background:#111915;color:#e5eee7}
+.catalog-filter-count{padding:0 3px 13px;color:#a4c9ae;font:11px 'DM Mono',monospace;white-space:nowrap}
+.catalog-branch-badge{display:inline-flex!important;align-self:flex-start;margin:0 0 5px!important;padding:5px 8px;border:1px solid #3a5943;border-radius:999px;background:#1b2b20;color:#a7e3b7!important;font:9px 'DM Mono',monospace!important;letter-spacing:.15px}
+.catalog-card-copy .catalog-branch-badge{width:max-content}
+.guide-branch-field{margin:0 0 18px}
+.guide-branch-field select{background:#fff;color:#2b2835;border-color:#ded9e8}
+.guide-branch-field option{background:#fff;color:#2b2835}
+.theme-dark .guide-branch-field select{background:#191620;color:#eeeaf5;border-color:#373144}
+.theme-dark .guide-branch-field option{background:#191620;color:#eeeaf5}
+.theme-light .catalog-filter-row{border-color:#dfe9e1;background:linear-gradient(110deg,#f2faf4,#fff)}
+.theme-light .catalog-branch-select>span{color:#55715e}
+.theme-light .catalog-branch-select select{border-color:#d2e2d5;background:#fff;color:#26352a}
+.theme-light .catalog-branch-select option{background:#fff;color:#26352a}
+.theme-light .catalog-filter-count{color:#39734b}
+.theme-light .catalog-branch-badge{border-color:#d5ead9;background:#eff9f1;color:#347446!important}
+@media(max-width:640px){.catalog-filter-row{align-items:stretch;flex-direction:column;margin-top:-4px}.catalog-branch-select{width:100%}.catalog-filter-count{padding:0 2px 1px}.guide-branch-field{width:100%}}

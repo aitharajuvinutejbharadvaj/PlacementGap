@@ -36,6 +36,7 @@ from agent.tools.render_report import render_report
 from agent.tools.search_jds import search_jds
 from memory.profile_store import ProfileStore
 from ontology.canonicalizer import find_mentions
+from ontology.engineering_catalog import branch_catalog, load_role_catalog
 
 ROOT = Path(__file__).resolve().parents[1]
 LOGGER = logging.getLogger(__name__)
@@ -200,6 +201,7 @@ class GoogleCredentialRequest(BaseModel):
 
 class GuideRequest(BaseModel):
     profile_text: str = Field(min_length=1, max_length=200_000)
+    branch: str = "All engineering branches"
 
 
 def _lookup(run_id: str) -> sqlite3.Row:
@@ -539,15 +541,24 @@ async def health() -> dict[str, str]:
 
 
 @app.get("/roles/catalog")
-async def roles_catalog() -> list[dict[str, str]]:
-    records = json.loads((ROOT / "ontology" / "data" / "jd_fixtures.json").read_text(encoding="utf-8"))
+async def roles_catalog() -> list[dict[str, Any]]:
+    records = load_role_catalog()
+    public_fields = (
+        "title", "role", "company", "location", "branch", "sector", "description",
+        "focus", "project", "foundation", "toolchain", "practice", "courses",
+    )
     return [
-        {key: str(record[key]) for key in ("title", "role", "company", "location")}
+        {key: record[key] for key in public_fields if key in record}
         for record in records
     ]
 
 
-def _career_recommendations(profile_text: str) -> dict[str, Any]:
+@app.get("/roles/branches")
+async def roles_branches() -> list[dict[str, Any]]:
+    return branch_catalog()
+
+
+def _career_recommendations(profile_text: str, branch: str = "All engineering branches") -> dict[str, Any]:
     candidate_skills: dict[str, str] = {}
     for _, _, skill in find_mentions(profile_text):
         candidate_skills[skill["id"]] = skill["canonical_name"]
@@ -557,7 +568,12 @@ def _career_recommendations(profile_text: str) -> dict[str, Any]:
             "We couldn't identify skills in that resume. Add a skills section, tools, projects, or experience details and try again.",
         )
 
-    records = json.loads((ROOT / "ontology" / "data" / "jd_fixtures.json").read_text(encoding="utf-8"))
+    records = load_role_catalog()
+    valid_branches = {item["name"] for item in branch_catalog()}
+    if branch != "All engineering branches" and branch not in valid_branches:
+        raise HTTPException(422, "Choose a branch from the available engineering list.")
+    if branch != "All engineering branches":
+        records = [record for record in records if record.get("branch") == branch]
     recommendations: list[dict[str, Any]] = []
     for record in records:
         job_text = record["text"]
@@ -587,6 +603,7 @@ def _career_recommendations(profile_text: str) -> dict[str, Any]:
                 "title": record["title"],
                 "company": record["company"],
                 "location": record["location"],
+                "branch": record.get("branch", "Computer Science & IT"),
                 "score": score,
                 "matched_required_count": len(matched_required),
                 "required_skill_count": len(required_skills),
@@ -605,10 +622,11 @@ def _career_recommendations(profile_text: str) -> dict[str, Any]:
         )
     )
     recognized_skills = sorted(candidate_skills.values(), key=str.casefold)
+    match_scope = f"in {branch}" if branch != "All engineering branches" else "across six engineering branches"
     return {
         "recognized_skills": recognized_skills,
         "recommendations": recommendations,
-        "basis": "Matches are based on recognized skill mentions compared with the required skills in 18 bundled role profiles. They are a starting point for exploration, not a hiring or career guarantee.",
+        "basis": f"Matches are based on recognized skill mentions compared with {len(records)} bundled role profiles {match_scope}. They are a starting point for exploration, not a hiring or career guarantee.",
     }
 
 
@@ -616,11 +634,14 @@ def _career_recommendations(profile_text: str) -> dict[str, Any]:
 async def guide_recommendations(payload: GuideRequest) -> dict[str, Any]:
     if not payload.profile_text.strip():
         raise HTTPException(422, "Add resume text or upload a resume to continue.")
-    return await asyncio.to_thread(_career_recommendations, payload.profile_text)
+    return await asyncio.to_thread(_career_recommendations, payload.profile_text, payload.branch)
 
 
 @app.post("/guide/recommendations/upload")
-async def guide_recommendations_upload(resume_file: Annotated[UploadFile, File()]) -> dict[str, Any]:
+async def guide_recommendations_upload(
+    resume_file: Annotated[UploadFile, File()],
+    branch: Annotated[str, Form()] = "All engineering branches",
+) -> dict[str, Any]:
     extension = Path(resume_file.filename or "").suffix.lower()
     kinds = {".pdf": "pdf", ".docx": "docx", ".txt": "text", ".md": "text"}
     kind = kinds.get(extension)
@@ -642,7 +663,7 @@ async def guide_recommendations_upload(resume_file: Annotated[UploadFile, File()
         raise HTTPException(422, "No selectable text was found. Paste the resume text or upload a text-based PDF/DOCX.")
     if len(profile_text) > 200_000:
         raise HTTPException(413, "Extracted resume text is too long. Paste a focused resume under 200,000 characters.")
-    return await asyncio.to_thread(_career_recommendations, profile_text)
+    return await asyncio.to_thread(_career_recommendations, profile_text, branch)
 
 
 def _account_response(user: dict[str, str], status_code: int = 200) -> JSONResponse:

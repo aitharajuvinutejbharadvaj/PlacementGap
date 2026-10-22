@@ -1,6 +1,26 @@
 export type RoadmapStep = { title: string; focus: string; deliverable: string };
 export type CourseSuggestion = { title: string; provider: string; url: string; note: string };
 export type RoleRoadmap = { sector: string; overview: string; horizon: string; steps: RoadmapStep[]; courses: CourseSuggestion[] };
+export type EngineeringRole = { branch: string; sector?: string; description?: string; focus?: string; project?: string; foundation?: string; toolchain?: string; practice?: string; courses?: CourseSuggestion[] };
+
+export function buildEngineeringRoadmap(role: EngineeringRole): RoleRoadmap {
+  const focus = role.focus || 'the role’s core engineering responsibilities';
+  const project = role.project || `Complete a small, documented project related to ${focus}.`;
+  return {
+    sector: role.sector || role.branch,
+    overview: role.description || `Build the foundations and practical evidence needed for ${focus}.`,
+    horizon: '12-week starter path',
+    steps: [
+      { title: 'Engineering foundations', focus: `Review the concepts that underpin ${role.branch}: ${role.foundation || 'mathematics, engineering science, and design fundamentals'}. Connect each concept to the role focus: ${focus}.`, deliverable: 'A one-page concept map with a worked example tied to the target role.' },
+      { title: 'Tools and technical workflow', focus: `Learn the role-relevant workflow: ${role.toolchain || 'simulation, measurement, analysis, and technical documentation'}. Keep files, assumptions, units, and revisions organized.`, deliverable: 'A repeatable tool workflow with a short setup and usage guide.' },
+      { title: 'Role specialization', focus: `Study ${focus}. Compare at least two design or operating choices and explain the constraints that influence them.`, deliverable: `A concise engineering note showing how you approached ${focus}.` },
+      { title: 'Applied portfolio project', focus: `Turn the role’s core work into a scoped, reviewable project: ${project}. State assumptions and identify what would need professional review.`, deliverable: project },
+      { title: 'Validation, safety, and quality', focus: `Review the result using role-appropriate checks. ${role.practice || 'Check assumptions, document limitations, and seek qualified review for safety-critical decisions.'}`, deliverable: 'A validation checklist, results summary, and limitations section.' },
+      { title: 'Portfolio and career preparation', focus: 'Present the problem, your individual contribution, calculations or evidence, design trade-offs, and lessons learned. Map the role requirements to examples in your resume.', deliverable: 'A polished case study, updated resume bullets, and a short technical walkthrough.' },
+    ],
+    courses: role.courses || [],
+  };
+}
 
 const resource = (title: string, provider: string, url: string, note: string): CourseSuggestion => ({ title, provider, url, note });
 const mdn = resource('Learn web development', 'MDN · Mozilla', 'https://developer.mozilla.org/en-US/docs/Learn_web_development', 'Structured HTML, CSS, JavaScript, accessibility, and browser fundamentals.');

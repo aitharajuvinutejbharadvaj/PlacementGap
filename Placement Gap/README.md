@@ -28,6 +28,10 @@ Email delivery is required to register accounts. Configure `PLACEMENTGAP_RESEND_
 
 For the Render service, use `https://placementgap.onrender.com` as `PLACEMENTGAP_PUBLIC_URL`. Copy `.env.example` to `.env` for local development, set `PLACEMENTGAP_SESSION_SECRET` to a random value to keep sessions valid across API restarts, and set `PLACEMENTGAP_HTTPS=true` when serving over HTTPS. Existing accounts from the older schema must verify their address once before signing in. Account and run data are stored locally in SQLite.
 
+## Engineering career paths
+
+The career catalog groups 18 pathways in each of six starting disciplines: Computer Science & IT, Electronics & Communication, Electrical, Mechanical, Civil, and Chemical Engineering. Role Explorer filters the catalog by branch; Guide Me can compare a resume against one branch or all six. Each added engineering role has a specialty focus, required and preferred skill profile, six-stage learning roadmap, a practical portfolio project, and official course or course-search links. The skill catalog includes the engineering vocabulary used in these role profiles so resume matching and target-role analysis use the same branch-specific requirements.
+
 ### Google and GitHub sign-in
 
 The login and account-creation screen also supports Google Identity Services and GitHub OAuth. Google ID tokens are verified by the API, and GitHub's OAuth state is checked before the API reads the user's verified email. Both providers can securely connect to an existing PlacementGap account when the provider proves ownership of the same email. Google sign-in requires a verified Gmail or Google Workspace address. GitHub asks only for public profile and email (`read:user user:email`) and does not retain its access token.
