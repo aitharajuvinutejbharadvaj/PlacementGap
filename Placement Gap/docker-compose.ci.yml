@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PLACEMENTGAP_FIXTURES: "1"
+      PLACEMENTGAP_SESSION_SECRET: placementgap-ci-session-secret-not-for-production
+      PLACEMENTGAP_HTTPS: "false"
+      PLACEMENTGAP_DATA_DIR: /app/outputs/app
+    volumes:
+      - ci-data:/app/outputs/app
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)
+      interval: 5s
+      timeout: 4s
+      retries: 20
+      start_period: 15s
+
+  chrome:
+    image: selenium/standalone-chrome:4.52.0-20261101
+    shm_size: 2gb
+    environment:
+      SE_NODE_MAX_SESSIONS: "1"
+      SE_NODE_SESSION_TIMEOUT: "180"
+
+  e2e:
+    build:
+      context: .
+      dockerfile: Dockerfile.e2e
+    environment:
+      PLACEMENTGAP_BASE_URL: http://app:8000
+      SELENIUM_REMOTE_URL: http://chrome:4444/wd/hub
+      PLACEMENTGAP_FIXTURES: "1"
+      PLACEMENTGAP_SESSION_SECRET: placementgap-ci-session-secret-not-for-production
+      PLACEMENTGAP_HTTPS: "false"
+      PLACEMENTGAP_DATA_DIR: /app/outputs/app
+    volumes:
+      - ci-data:/app/outputs/app
+      - ./artifacts/selenium:/app/artifacts/selenium
+    depends_on:
+      app:
+        condition: service_healthy
+      chrome:
+        condition: service_started
+
+volumes:
+  ci-data:

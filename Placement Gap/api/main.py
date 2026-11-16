@@ -57,6 +57,9 @@ def _load_local_env() -> None:
 _load_local_env()
 SESSION_SECRET = os.getenv("PLACEMENTGAP_SESSION_SECRET") or secrets.token_urlsafe(48)
 DATA = ROOT / "outputs" / "app"
+configured_data_dir = os.getenv("PLACEMENTGAP_DATA_DIR", "").strip()
+if configured_data_dir:
+    DATA = Path(configured_data_dir).expanduser().resolve()
 DATA.mkdir(parents=True, exist_ok=True)
 DB = DATA / "runs.sqlite3"
 app = FastAPI(title="PlacementGap", version="0.2.0")

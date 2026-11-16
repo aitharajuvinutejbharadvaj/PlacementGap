@@ -1,0 +1,13 @@
+.env
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+web/node_modules/
+web/dist/
+outputs/app/
+outputs/selenium-ci/
+artifacts/selenium/
